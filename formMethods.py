@@ -140,6 +140,7 @@ public class %s extends StarMacro {
 
         importGeometry();
         createCylinderParts();
+        createVolumeMeshControl();
     }
 
     private void importGeometry() {
@@ -283,6 +284,122 @@ public class %s extends StarMacro {
         simpleCylinderPart_2.rebuildSimpleShapePart();
 
         simpleCylinderPart_2.setDoNotRetessellate(false);
+    }
+
+    private void createVolumeMeshControl(){
+
+        Simulation simulation =
+                getActiveSimulation();
+
+        Units units_0 =
+                simulation.getUnitsManager().getPreferredUnits(Dimensions.Builder().length(1).build());
+
+        SimpleCylinderPart simpleCylinderPart_0 =
+                ((SimpleCylinderPart) simulation.get(SimulationPartManager.class).getPart("Cylinder"));
+
+        SimpleCylinderPart simpleCylinderPart_1 =
+                ((SimpleCylinderPart) simulation.get(SimulationPartManager.class).getPart("Cylinder 2"));
+
+        SimpleCylinderPart simpleCylinderPart_2 =
+                ((SimpleCylinderPart) simulation.get(SimulationPartManager.class).getPart("Cylinder 3"));
+
+        SolidModelPart solidModelPart_0 =
+                ((SolidModelPart) simulation.get(SimulationPartManager.class).getPart("Body 1_Body"));
+
+        AutoMeshOperation autoMeshOperation_0 =
+                simulation.get(MeshOperationManager.class).createAutoMeshOperation(new StringVector(new String[]{"star.resurfacer.ResurfacerAutoMesher", "star.dualmesher.DualAutoMesher"}), new NeoObjectVector(new Object[]{solidModelPart_0}));
+
+        VolumeCustomMeshControl volumeCustomMeshControl_0 =
+                autoMeshOperation_0.getCustomMeshControls().createVolumeControl();
+
+        VolumeCustomMeshControl volumeCustomMeshControl_1 =
+                autoMeshOperation_0.getCustomMeshControls().createVolumeControl();
+
+        VolumeCustomMeshControl volumeCustomMeshControl_2 =
+                autoMeshOperation_0.getCustomMeshControls().createVolumeControl();
+
+        SurfaceCustomMeshControl surfaceCustomMeshControl_0 =
+                autoMeshOperation_0.getCustomMeshControls().createSurfaceControl();
+
+        volumeCustomMeshControl_0.getGeometryObjects().setQuery(null);
+
+        volumeCustomMeshControl_0.getGeometryObjects().setObjects(simpleCylinderPart_0);
+
+        volumeCustomMeshControl_1.getGeometryObjects().setQuery(null);
+
+        volumeCustomMeshControl_1.getGeometryObjects().setObjects(simpleCylinderPart_1);
+
+        volumeCustomMeshControl_2.getGeometryObjects().setQuery(null);
+
+        volumeCustomMeshControl_2.getGeometryObjects().setObjects(simpleCylinderPart_2);
+
+        surfaceCustomMeshControl_0.getGeometryObjects().setQuery(null);
+
+        PartSurface partSurface_0 =
+                ((PartSurface) solidModelPart_0.getPartSurfaceManager().getPartSurface("Default"));
+
+        PartSurface partSurface_1 =
+                ((PartSurface) solidModelPart_0.getPartSurfaceManager().getPartSurface("Outlet"));
+
+        surfaceCustomMeshControl_0.getGeometryObjects().setObjects(partSurface_0, partSurface_1);
+
+        surfaceCustomMeshControl_0.getCustomConditions().get(PartsTargetSurfaceSizeOption.class).setSelected(PartsTargetSurfaceSizeOption.Type.CUSTOM);
+
+        PartsTargetSurfaceSize partsTargetSurfaceSize_0 =
+                surfaceCustomMeshControl_0.getCustomValues().get(PartsTargetSurfaceSize.class);
+
+        Units units_1 =
+                ((Units) simulation.getUnitsManager().getObject(""));
+
+        partsTargetSurfaceSize_0.getRelativeSizeScalar().setValueAndUnits(20.0, units_1);
+
+        VolumeControlResurfacerSizeOption volumeControlResurfacerSizeOption_0 =
+                volumeCustomMeshControl_0.getCustomConditions().get(VolumeControlResurfacerSizeOption.class);
+
+        volumeControlResurfacerSizeOption_0.setVolumeControlBaseSizeOption(true);
+
+        VolumeControlDualMesherSizeOption volumeControlDualMesherSizeOption_0 =
+                volumeCustomMeshControl_0.getCustomConditions().get(VolumeControlDualMesherSizeOption.class);
+
+        volumeControlDualMesherSizeOption_0.setVolumeControlBaseSizeOption(true);
+
+        VolumeControlSize volumeControlSize_0 =
+                volumeCustomMeshControl_0.getCustomValues().get(VolumeControlSize.class);
+
+        volumeControlSize_0.getRelativeSizeScalar().setValueAndUnits(2.0, units_1);
+
+        VolumeControlResurfacerSizeOption volumeControlResurfacerSizeOption_1 =
+                volumeCustomMeshControl_1.getCustomConditions().get(VolumeControlResurfacerSizeOption.class);
+
+        volumeControlResurfacerSizeOption_1.setVolumeControlBaseSizeOption(true);
+
+        VolumeControlDualMesherSizeOption volumeControlDualMesherSizeOption_1 =
+                volumeCustomMeshControl_1.getCustomConditions().get(VolumeControlDualMesherSizeOption.class);
+
+        volumeControlDualMesherSizeOption_1.setVolumeControlBaseSizeOption(true);
+
+        VolumeControlSize volumeControlSize_1 =
+                volumeCustomMeshControl_1.getCustomValues().get(VolumeControlSize.class);
+
+        volumeControlSize_1.getRelativeSizeScalar().setValueAndUnits(2.0, units_1);
+
+        VolumeControlResurfacerSizeOption volumeControlResurfacerSizeOption_2 =
+                volumeCustomMeshControl_2.getCustomConditions().get(VolumeControlResurfacerSizeOption.class);
+
+        volumeControlResurfacerSizeOption_2.setVolumeControlBaseSizeOption(true);
+
+        VolumeControlDualMesherSizeOption volumeControlDualMesherSizeOption_2 =
+                volumeCustomMeshControl_2.getCustomConditions().get(VolumeControlDualMesherSizeOption.class);
+
+        volumeControlDualMesherSizeOption_2.setVolumeControlBaseSizeOption(true);
+
+        VolumeControlSize volumeControlSize_2 =
+                volumeCustomMeshControl_2.getCustomValues().get(VolumeControlSize.class);
+
+        volumeControlSize_2.getRelativeSizeScalar().setValueAndUnits(5.0, units_1);
+
+        autoMeshOperation_0.getDefaultValues().get(BaseSize.class).setValueAndUnits(0.5, units_0);
+
     }
 
 }       
