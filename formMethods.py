@@ -1,6 +1,8 @@
 from settings import EXCEL_START_ROW
 from settings import EXCEL_START_COLL
-from win32com.client import Dispatch, gencache
+from settings import GEOM_STP_PATH
+from win32com.client import Dispatch
+from win32com.client import gencache
 import pythoncom
 
 class Methods:
@@ -92,6 +94,109 @@ class Methods:
 
         kompas_document.SaveAs(savePath + f'{row}.stp')
         kompas_document.Close(True)
+
+    def macroGeomCgange(self,row):
+        fout = open(f"Macroses/macros{(EXCEL_START_ROW + row)}.java","w")
+        fout.write("""
+package macro;
+
+import star.amr.AmrModel;
+import star.base.neo.DoubleVector;
+import star.base.neo.NeoObjectVector;
+import star.base.neo.NeoProperty;
+import star.base.neo.StringVector;
+import star.cadmodeler.*;
+import star.combustion.*;
+import star.combustion.fgm.FgmCombustionModel;
+import star.combustion.fgm.FgmIdealGasModel;
+import star.combustion.fgm.FgmReactionModel;
+import star.combustion.fgm.FgmTable;
+import star.combustion.tablegenerators.*;
+import star.common.*;
+import star.dualmesher.VolumeControlDualMesherSizeOption;
+import star.emissions.NoxModel;
+import star.emissions.NoxThreeEquationZeldovichModel;
+import star.emissions.ThermalNoxModel;
+import star.flow.MassFlowRateProfile;
+import star.flow.VelocityMagnitudeProfile;
+import star.keturb.KEpsilonTurbulence;
+import star.keturb.KeTwoLayerAllYplusWallTreatment;
+import star.keturb.RkeTwoLayerTurbModel;
+import star.material.MaterialDataBaseManager;
+import star.material.MultiComponentGasModel;
+import star.meshing.*;
+import star.reactions.ReactingModel;
+import star.resurfacer.VolumeControlResurfacerSizeOption;
+import star.segregatedenergy.SegregatedFluidEnthalpyModel;
+import star.segregatedflow.SegregatedFlowModel;
+import star.turbulence.RansTurbulenceModel;
+import star.turbulence.TurbulentModel;
+import star.vis.*;
+
+import javax.swing.*;
+
+public class %s extends StarMacro {
+
+    public void execute() {
+
+        importGeometry();
+    }
+
+    private void importGeometry() {
+
+        Simulation simulation =
+                getActiveSimulation();
+
+        CadModel cadModel =
+                simulation.get(SolidModelManager.class).createSolidModel();
+
+        cadModel.resetSystemOptions();
+
+        ImportCadFileFeature importCadFileFeature =
+                cadModel.importCadFile(resolvePath("%s"), true, false, false, false, false, false, false, true, false, true, NeoProperty.fromString("{\'CGR\': 0, \'IFC\': 0, \'STEP\': 0, \'NX\': 0, \'CATIAV5\': 0, \'SE\': 0, \'JT\': 0}"), false);
+
+        star.cadmodeler.Body cadmodelerBody_0 =
+                ((star.cadmodeler.Body) importCadFileFeature.getBodyByIndex(1));
+
+        Face face_0 =
+                ((Face) importCadFileFeature.getFaceByLocation(cadmodelerBody_0, new DoubleVector(new double[]{0.01, -0.22786658652431685, 0.10277042815333508})));
+
+        cadModel.setFaceNameAttributes(new NeoObjectVector(new Object[]{face_0}), "Air blades", false);
+
+        Face face_1 =
+                ((Face) importCadFileFeature.getFaceByLocation(cadmodelerBody_0, new DoubleVector(new double[]{0.01, -0.23814856654623856, 0.4957704212230306})));
+
+        cadModel.setFaceNameAttributes(new NeoObjectVector(new Object[]{face_1}), "Air input", false);
+
+        Face face_2 =
+                ((Face) importCadFileFeature.getFaceByLocation(cadmodelerBody_0, new DoubleVector(new double[]{0.01, -0.04266834375631555, -0.13363422057600013})));
+
+        cadModel.setFaceNameAttributes(new NeoObjectVector(new Object[]{face_2}), "CH4", false);
+
+        Face face_3 =
+                ((Face) importCadFileFeature.getFaceByLocation(cadmodelerBody_0, new DoubleVector(new double[]{0.01, -0.042284638094857586, 0.08802686971235965})));
+
+        cadModel.setFaceNameAttributes(new NeoObjectVector(new Object[]{face_3}), "No Gas 1", false);
+
+        Face face_4 =
+                ((Face) importCadFileFeature.getFaceByLocation(cadmodelerBody_0, new DoubleVector(new double[]{0.01, -0.009175941885004056, 0.004994952138007335})));
+
+        cadModel.setFaceNameAttributes(new NeoObjectVector(new Object[]{face_4}), "No Gas 2", false);
+
+        Face face_5 =
+                ((Face) importCadFileFeature.getFaceByLocation(cadmodelerBody_0, new DoubleVector(new double[]{-10.667, 0.6180132, -0.6180132})));
+
+        cadModel.setFaceNameAttributes(new NeoObjectVector(new Object[]{face_5}), "Outlet", false);
+
+        cadmodelerBody_0.getUnNamedFacesDefaultAttributeName();
+
+        simulation.get(SolidModelManager.class).endEditCadModel(cadModel);
+
+        cadModel.createParts(new NeoObjectVector(new Object[]{cadmodelerBody_0}), new NeoObjectVector(new Object[]{}), true, false, 1, false, false, 3, "SharpEdges", 30.0, 2, true, 1.0E-5, false);
+    }
+
+}       
+         """ % (f"macros{(EXCEL_START_ROW + row)}",f"{GEOM_STP_PATH}{(EXCEL_START_ROW + row)}.stp"))
 
 def get_kompas_api7():
     module = gencache.EnsureModule("{69AC2981-37C0-4379-84FD-5DD2F3C0A520}", 0, 1, 0)

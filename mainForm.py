@@ -36,6 +36,7 @@ def btnOkClicked():
 
     for i in range(row_number):
         methods.changeGeom(lblGeom.cget('text'),sheet_obj,EXCEL_START_ROW+i)
+        methods.macroGeomCgange(i)
 
 window = Tk()
 
