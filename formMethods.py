@@ -1,6 +1,5 @@
 from settings import EXCEL_START_ROW
 from settings import EXCEL_START_COLL
-from settings import GEOM_STP_PATH
 from win32com.client import Dispatch
 from win32com.client import gencache
 import pythoncom
@@ -95,8 +94,8 @@ class Methods:
         kompas_document.SaveAs(savePath + f'{row}.stp')
         kompas_document.Close(True)
 
-    def macroGeomCgange(self,row):
-        fout = open(f"Macroses/macros{(EXCEL_START_ROW + row)}.java","w")
+    def macroGeomCgange(self,row,geom):
+        fout = open(f"Macroses/macros{row}.java","w")
         fout.write("""
 package macro;
 
@@ -140,6 +139,7 @@ public class %s extends StarMacro {
     public void execute() {
 
         importGeometry();
+        createCylinderParts();
     }
 
     private void importGeometry() {
@@ -195,8 +195,98 @@ public class %s extends StarMacro {
         cadModel.createParts(new NeoObjectVector(new Object[]{cadmodelerBody_0}), new NeoObjectVector(new Object[]{}), true, false, 1, false, false, 3, "SharpEdges", 30.0, 2, true, 1.0E-5, false);
     }
 
+    private void createCylinderParts() {
+
+        Simulation simulation =
+                getActiveSimulation();
+
+        Units units_0 =
+                simulation.getUnitsManager().getPreferredUnits(Dimensions.Builder().length(1).build());
+
+        MeshPartFactory meshPartFactory_0 =
+                simulation.get(MeshPartFactory.class);
+
+        SimpleCylinderPart simpleCylinderPart_0 =
+                meshPartFactory_0.createNewCylinderPart(simulation.get(SimulationPartManager.class));
+
+        simpleCylinderPart_0.setDoNotRetessellate(true);
+
+        LabCoordinateSystem labCoordinateSystem_0 =
+                simulation.getCoordinateSystemManager().getLabCoordinateSystem();
+
+        simpleCylinderPart_0.setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_0.getStartCoordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_0.getStartCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{0.01, 0.0, 0.0}));
+
+        simpleCylinderPart_0.getEndCoordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_0.getEndCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-0.667, 0.0, 0.0}));
+
+        simpleCylinderPart_0.getRadius().setUnits(units_0);
+
+        simpleCylinderPart_0.getRadius().setValue(0.721);
+
+        simpleCylinderPart_0.getTessellationDensityOption().setSelected(TessellationDensityOption.Type.MEDIUM);
+
+        simpleCylinderPart_0.rebuildSimpleShapePart();
+
+        simpleCylinderPart_0.setDoNotRetessellate(false);
+
+        SimpleCylinderPart simpleCylinderPart_1 =
+                meshPartFactory_0.createNewCylinderPart(simulation.get(SimulationPartManager.class));
+
+        simpleCylinderPart_1.setDoNotRetessellate(true);
+
+        simpleCylinderPart_1.setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_1.getStartCoordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_1.getStartCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-0.667, 0.0, 0.0}));
+
+        simpleCylinderPart_1.getEndCoordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_1.getEndCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-1.111, 0.0, 0.0}));
+
+        simpleCylinderPart_1.getRadius().setUnits(units_0);
+
+        simpleCylinderPart_1.getRadius().setValue(0.535);
+
+        simpleCylinderPart_1.getTessellationDensityOption().setSelected(TessellationDensityOption.Type.MEDIUM);
+
+        simpleCylinderPart_1.rebuildSimpleShapePart();
+
+        simpleCylinderPart_1.setDoNotRetessellate(false);
+
+        SimpleCylinderPart simpleCylinderPart_2 =
+                meshPartFactory_0.createNewCylinderPart(simulation.get(SimulationPartManager.class));
+
+        simpleCylinderPart_2.setDoNotRetessellate(true);
+
+        simpleCylinderPart_2.setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_2.getStartCoordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_2.getStartCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-1.111, 0.0, 0.0}));
+
+        simpleCylinderPart_2.getEndCoordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        simpleCylinderPart_2.getEndCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-10.667, 0.0, 0.0}));
+
+        simpleCylinderPart_2.getRadius().setUnits(units_0);
+
+        simpleCylinderPart_2.getRadius().setValue(1.5);
+
+        simpleCylinderPart_2.getTessellationDensityOption().setSelected(TessellationDensityOption.Type.MEDIUM);
+
+        simpleCylinderPart_2.rebuildSimpleShapePart();
+
+        simpleCylinderPart_2.setDoNotRetessellate(false);
+    }
+
 }       
-         """ % (f"macros{(EXCEL_START_ROW + row)}",f"{GEOM_STP_PATH}{(EXCEL_START_ROW + row)}.stp"))
+         """ % (f"macros{row}",f"{geom}{row}.stp"))
 
 def get_kompas_api7():
     module = gencache.EnsureModule("{69AC2981-37C0-4379-84FD-5DD2F3C0A520}", 0, 1, 0)
