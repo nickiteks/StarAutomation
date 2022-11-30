@@ -141,6 +141,7 @@ public class %s extends StarMacro {
         importGeometry();
         createCylinderParts();
         createVolumeMeshControl();
+        createBoundaries();
     }
 
     private void importGeometry() {
@@ -399,6 +400,50 @@ public class %s extends StarMacro {
         volumeControlSize_2.getRelativeSizeScalar().setValueAndUnits(5.0, units_1);
 
         autoMeshOperation_0.getDefaultValues().get(BaseSize.class).setValueAndUnits(0.5, units_0);
+
+    }
+
+    private void createBoundaries() {
+
+        Simulation simulation =
+                getActiveSimulation();
+
+        SolidModelPart solidModelPart =
+                ((SolidModelPart) simulation.get(SimulationPartManager.class).getPart("Body 1_Body"));
+
+        simulation.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{solidModelPart}), "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null, "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY, "OneEdgeBoundaryPerPart", null);
+
+        Region region_0 =
+                simulation.getRegionManager().getRegion("Body 1_Body");
+
+        Boundary boundary_0 =
+                region_0.getBoundaryManager().getBoundary("Air blades");
+
+        InletBoundary inletBoundary_0 =
+                ((InletBoundary) simulation.get(ConditionTypeManager.class).get(InletBoundary.class));
+
+        boundary_0.setBoundaryType(inletBoundary_0);
+
+        Boundary boundary_1 =
+                region_0.getBoundaryManager().getBoundary("Air input");
+
+        boundary_1.setBoundaryType(inletBoundary_0);
+
+        Boundary boundary_2 =
+                region_0.getBoundaryManager().getBoundary("CH4");
+
+        MassFlowBoundary massFlowBoundary_0 =
+                ((MassFlowBoundary) simulation.get(ConditionTypeManager.class).get(MassFlowBoundary.class));
+
+        boundary_2.setBoundaryType(massFlowBoundary_0);
+
+        Boundary boundary_3 =
+                region_0.getBoundaryManager().getBoundary("Outlet");
+
+        PressureBoundary pressureBoundary_0 =
+                ((PressureBoundary) simulation.get(ConditionTypeManager.class).get(PressureBoundary.class));
+
+        boundary_3.setBoundaryType(pressureBoundary_0);
 
     }
 
