@@ -1,9 +1,12 @@
 from tkinter import *
 from tkinter import filedialog as fd
+import os
 import openpyxl
 from formMethods import Methods
 from settings import EXCEL_START_COLL
 from settings import EXCEL_START_ROW
+from settings import STAR_PATH
+from settings import MACROS_PATH
 
 
 def btnSaveClicked():
@@ -22,7 +25,9 @@ def btnOkClicked():
     """
     Основной метод работы
     Подсчет количества строк, относительно стартовой ячейки в настройках
-    Определение повторяющейся геометрии 
+    
+    Определение повторяющейся геометрии
+
     """
     wb_obj = openpyxl.load_workbook(lblExcel.cget('text'))
     sheet_obj = wb_obj.active
@@ -38,12 +43,17 @@ def btnOkClicked():
     print(repeat_row)
     
 
-    for i in range(row_number):
+    for i in range(2):
         methods.changeGeom(lblGeom.cget('text'),sheet_obj,EXCEL_START_ROW+i)
         methods.macroGeomCgange(EXCEL_START_ROW + i,
                                 lblGeom.cget('text')[:-4].replace('/','\\\\'),
                                 sheet_obj,
                                 lblSave.cget('text').replace('/','\\\\'))
+
+        sim = lblSave.cget('text').replace('/','\\')+'\\'
+        sim = f"{sim}star.sim"
+        java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
+        os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
 
 window = Tk()
 

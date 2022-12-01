@@ -38,14 +38,24 @@ class Methods:
         return 0
 
     def changeGeom(self,geomPath,sheet_obj,row):
+        def get_kompas_api7():
+                module = gencache.EnsureModule("{69AC2981-37C0-4379-84FD-5DD2F3C0A520}", 0, 1, 0)
+                api = module.IKompasAPIObject(
+                        Dispatch("Kompas.Application.7")._oleobj_.QueryInterface(module.IKompasAPIObject.CLSID,
+                                                                                pythoncom.IID_IDispatch))
+                const = gencache.EnsureModule("{75C9F5D0-B5B8-4526-8681-9903C567D2ED}", 0, 1, 0).constants
+                return module, api, const
+        
+        get_kompas_api7()
+
         module7, api7, const7 = get_kompas_api7()  # Подключаемся к API7
         app7 = api7.Application  # Получаем основной интерфейс
-        app7.Visible = False  # Показываем окно пользователю (если скрыто)
+        app7.Visible = True  # Показываем окно пользователю (если скрыто)
         app7.HideMessage = const7.ksHideMessageNo  # Отвечаем НЕТ на любые вопросы программы
         print(app7.ApplicationName(FullName=True))  # Печатаем название программы
 
         doc7 = app7.Documents.Open(PathName=geomPath,
-                                Visible=False,
+                                Visible=True,
                                 ReadOnly=True)
 
         #  Подключим константы API Компас
@@ -1031,11 +1041,5 @@ public class %s extends StarMacro {
          float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value),
          f"{save_path}\\\\star{row}.sim"
          ))
-
-def get_kompas_api7():
-    module = gencache.EnsureModule("{69AC2981-37C0-4379-84FD-5DD2F3C0A520}", 0, 1, 0)
-    api = module.IKompasAPIObject(
-        Dispatch("Kompas.Application.7")._oleobj_.QueryInterface(module.IKompasAPIObject.CLSID,
-                                                                 pythoncom.IID_IDispatch))
-    const = gencache.EnsureModule("{75C9F5D0-B5B8-4526-8681-9903C567D2ED}", 0, 1, 0).constants
-    return module, api, const
+        
+        fout.close()
