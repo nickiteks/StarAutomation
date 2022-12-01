@@ -37,12 +37,12 @@ class Methods:
     def changeGeom(self,geomPath,sheet_obj,row):
         module7, api7, const7 = get_kompas_api7()  # Подключаемся к API7
         app7 = api7.Application  # Получаем основной интерфейс
-        app7.Visible = True  # Показываем окно пользователю (если скрыто)
+        app7.Visible = False  # Показываем окно пользователю (если скрыто)
         app7.HideMessage = const7.ksHideMessageNo  # Отвечаем НЕТ на любые вопросы программы
         print(app7.ApplicationName(FullName=True))  # Печатаем название программы
 
         doc7 = app7.Documents.Open(PathName=geomPath,
-                                Visible=True,
+                                Visible=False,
                                 ReadOnly=True)
 
         #  Подключим константы API Компас
@@ -94,7 +94,7 @@ class Methods:
         kompas_document.SaveAs(savePath + f'{row}.stp')
         kompas_document.Close(True)
 
-    def macroGeomCgange(self,row,geom):
+    def macroGeomCgange(self,row,geom,sheet_obj):
         fout = open(f"Macroses/macros{row}.java","w")
         fout.write("""
 package macro;
@@ -749,7 +749,7 @@ public class %s extends StarMacro {
         Units units_3 =
                 ((Units) simulation.getUnitsManager().getObject("m/s"));
 
-        velocityMagnitudeProfile_0.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(77.01, units_3);
+        velocityMagnitudeProfile_0.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_3);
 
         Boundary boundary_1 =
                 region_0.getBoundaryManager().getBoundary("Air input");
@@ -757,7 +757,7 @@ public class %s extends StarMacro {
         VelocityMagnitudeProfile velocityMagnitudeProfile_1 =
                 boundary_1.getValues().get(VelocityMagnitudeProfile.class);
 
-        velocityMagnitudeProfile_1.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(30.23, units_3);
+        velocityMagnitudeProfile_1.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_3);
 
         Boundary boundary_2 =
                 region_0.getBoundaryManager().getBoundary("CH4");
@@ -773,7 +773,7 @@ public class %s extends StarMacro {
         Units units_4 =
                 ((Units) simulation.getUnitsManager().getObject("kg/s"));
 
-        massFlowRateProfile_0.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(0.7334, units_4);
+        massFlowRateProfile_0.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_4);
     }
 
     private void createLinePart() {
@@ -1007,7 +1007,13 @@ public class %s extends StarMacro {
 
     }
 }       
-         """ % (f"macros{row}",f"{geom}{row}.stp"))
+         """ % (
+         f"macros{row}",
+         f"{geom}{row}.stp",
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+10).value),
+         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
+         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value)
+         ))
 
 def get_kompas_api7():
     module = gencache.EnsureModule("{69AC2981-37C0-4379-84FD-5DD2F3C0A520}", 0, 1, 0)
