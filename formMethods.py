@@ -1,5 +1,8 @@
 from settings import EXCEL_START_ROW
 from settings import EXCEL_START_COLL
+from settings import GRIMECH30_PATH
+from settings import THERMO30_PATH
+from settings import TRANSPORT_PATH
 from win32com.client import Dispatch
 from win32com.client import gencache
 import pythoncom
@@ -677,7 +680,7 @@ public class %s extends StarMacro {
         TableChemistryDefinition tableChemistryDefinition_0 =
                 ((TableChemistryDefinition) fgmTableGenerator.getTableChemistryDefinition());
 
-        tableChemistryDefinition_0.importCaseFromChemkin("D:\\\\work\\\\Training\\\\traningin\\\\Sanida\\\\grimech30.dat", "D:\\\\work\\\\Training\\\\traningin\\\\Sanida\\\\thermo30.dat", "D:\\\\work\\\\Training\\\\traningin\\\\Sanida\\\\transport.dat", "", "");
+        tableChemistryDefinition_0.importCaseFromChemkin(resolvePath("%s"), resolvePath("%s"), resolvePath("%s"), "", "");
 
         TableFluidStreamCollection tableFluidStreamCollection_0 =
                 ((TableFluidStreamCollection) fgmTableGenerator.getTableFluidStreamCollection());
@@ -1010,6 +1013,9 @@ public class %s extends StarMacro {
          """ % (
          f"macros{row}",
          f"{geom}{row}.stp",
+         GRIMECH30_PATH,
+         THERMO30_PATH,
+         TRANSPORT_PATH,
          float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+10).value),
          float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
          float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value)
