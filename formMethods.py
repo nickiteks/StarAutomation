@@ -97,7 +97,7 @@ class Methods:
         kompas_document.SaveAs(savePath + f'{row}.stp')
         kompas_document.Close(True)
 
-    def macroGeomCgange(self,row,geom,sheet_obj):
+    def macroGeomCgange(self,row,geom,sheet_obj,save_path):
         fout = open(f"Macroses/macros{row}.java","w")
         fout.write("""
 package macro;
@@ -153,6 +153,7 @@ public class %s extends StarMacro {
         settingPlaneSection();
         createPlot();
         setStoppingCriterion(7000);
+        saveState();
     }
 
     private void importGeometry() {
@@ -1009,6 +1010,15 @@ public class %s extends StarMacro {
         stepStoppingCriterion.setMaximumNumberSteps(maxStep);
 
     }
+
+        private void saveState() {
+
+        Simulation simulation =
+                getActiveSimulation();
+
+        simulation.saveState("%s");
+
+    }
 }       
          """ % (
          f"macros{row}",
@@ -1018,7 +1028,8 @@ public class %s extends StarMacro {
          TRANSPORT_PATH,
          float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+10).value),
          float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
-         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value)
+         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value),
+         f"{save_path}\\\\star{row}.sim"
          ))
 
 def get_kompas_api7():

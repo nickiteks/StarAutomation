@@ -6,13 +6,17 @@ from settings import EXCEL_START_COLL
 from settings import EXCEL_START_ROW
 
 
+def btnSaveClicked():
+    directory_save = fd.askdirectory()
+    lblSave.config(text=directory_save)
+
 def btnGeomClicked():
-    fileGeom = fd.askopenfilename()
-    lblGeom.config(text=fileGeom)
+    file_geom = fd.askopenfilename()
+    lblGeom.config(text=file_geom)
 
 def btnExcelClicked():
-    fileExcel = fd.askopenfilename()
-    lblExcel.config(text=fileExcel)
+    file_excel = fd.askopenfilename()
+    lblExcel.config(text=file_excel)
 
 def btnOkClicked():
     """
@@ -36,7 +40,10 @@ def btnOkClicked():
 
     for i in range(row_number):
         methods.changeGeom(lblGeom.cget('text'),sheet_obj,EXCEL_START_ROW+i)
-        methods.macroGeomCgange(EXCEL_START_ROW + i,lblGeom.cget('text')[:-4].replace('/','\\\\'),sheet_obj)
+        methods.macroGeomCgange(EXCEL_START_ROW + i,
+                                lblGeom.cget('text')[:-4].replace('/','\\\\'),
+                                sheet_obj,
+                                lblSave.cget('text').replace('/','\\\\'))
 
 window = Tk()
 
@@ -54,6 +61,12 @@ lblExcel.grid(row=1,column=0)
 
 btnExcel = Button(window,text="Выбрать Excel",command = btnExcelClicked)
 btnExcel.grid(row=1,column=1)
+
+lblSave = Label(window,text="Сохранение .sim файлов")
+lblSave.grid(row=2,column=0)
+
+btnSave = Button(window,text='Выбрать путь',command=btnSaveClicked)
+btnSave.grid(row=2,column=1)
 
 btnOk = Button(window,text='Ok',command = btnOkClicked)
 btnOk.grid(row=10,column=10)
