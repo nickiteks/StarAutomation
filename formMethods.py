@@ -707,7 +707,7 @@ public class %s extends StarMacro {
         TableFluidStream tableFluidStream_1 =
                 ((TableFluidStream) tableFluidStreamCollection_0.getFuelStream());
 
-        tableFluidStream_1.getFluidStreamComposition().setArray(new DoubleVector(new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
+        tableFluidStream_1.getFluidStreamComposition().setArray(new DoubleVector(new double[] {%f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, %f, 0.0, %f, 0.0, %f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0}));
 
         TableSpeciesForPostProcessing tableSpeciesForPostProcessing_0 =
                 ((TableSpeciesForPostProcessing) fgmTableParameters.getTableSpeciesForPostProcessing());
@@ -1036,7 +1036,14 @@ public class %s extends StarMacro {
          GRIMECH30_PATH,
          THERMO30_PATH,
          TRANSPORT_PATH,
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+10).value),
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+13).value), #Ar
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+19).value), #C02
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+16).value), #H2
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+20).value), #H2O
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+18).value), #N2
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+15).value), #NH3
+         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+17).value), #O2
+         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+10).value),
          float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
          float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value),
          f"{save_path}\\\\star{row}.sim"
