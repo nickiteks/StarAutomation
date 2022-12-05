@@ -702,12 +702,14 @@ public class %s extends StarMacro {
         Units units_2 =
                 ((Units) simulation.getUnitsManager().getObject("K"));
 
-        tableFluidStream_0.getTemperature().setValueAndUnits(477.0, units_2);
+        tableFluidStream_0.getTemperature().setValueAndUnits(%f, units_2);
+
+        tableFluidStream_0.getFluidStreamComposition().setArray(new DoubleVector(new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, %f, 0.0, %f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0}));
 
         TableFluidStream tableFluidStream_1 =
                 ((TableFluidStream) tableFluidStreamCollection_0.getFuelStream());
 
-        tableFluidStream_1.getFluidStreamComposition().setArray(new DoubleVector(new double[] {%f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, %f, 0.0, %f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0}));
+        tableFluidStream_1.getFluidStreamComposition().setArray(new DoubleVector(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
 
         TableSpeciesForPostProcessing tableSpeciesForPostProcessing_0 =
                 ((TableSpeciesForPostProcessing) fgmTableParameters.getTableSpeciesForPostProcessing());
@@ -1064,6 +1066,7 @@ import star.base.neo.StringVector;
 import star.cadmodeler.*;
 import star.combustion.*;
 import star.combustion.fgm.FgmCombustionModel;
+import star.energy.StaticTemperatureProfile;
 import star.combustion.fgm.FgmIdealGasModel;
 import star.combustion.fgm.FgmReactionModel;
 import star.combustion.fgm.FgmTable;
@@ -1095,405 +1098,107 @@ public class %s extends StarMacro {
 
     public void execute() {
 
-        createFgmTable();
-        createLinePart();
-        settingPlaneSection();
-        createPlot();
-        setStoppingCriterion(7000);
-        saveState();
-    }
-
-    private void createFgmTable() {
-        Simulation simulation =
-                getActiveSimulation();
-
-        PhysicsContinuum physicsContinuum =
-                ((PhysicsContinuum) simulation.getContinuumManager().getContinuum("Physics 1"));
-
-        Region region_0 =
-                simulation.getRegionManager().getRegion("Body 1_Body");
-
-        FgmTableGenerator fgmTableGenerator =
-                physicsContinuum.get(FgmTableGenerator.class);
-
-        FgmTableParameters fgmTableParameters =
-                ((FgmTableParameters) fgmTableGenerator.getTableParameters());
-
-        fgmTableParameters.getTableProgressVariableDefinition().setSelected(TableProgressVariableDefinitionOption.Type.CHEMENTHALPY);
-
-        Fgm0dIgnitionNumericalSettings fgm0dIgnitionNumericalSettings =
-                ((Fgm0dIgnitionNumericalSettings) fgmTableParameters.getFgm0dIgnitionNumericalSettings());
-
-        TableAxisParameters tableAxisParameters_0 =
-                ((TableAxisParameters) fgm0dIgnitionNumericalSettings.getTableAxisParametersManager().getComponent("Heat Loss Ratio"));
-
-        tableAxisParameters_0.setAdapt(false);
-
-        FixedGridParameters fixedGridParameters_0 =
-                tableAxisParameters_0.getFixedGridParameters();
-
-        IntegerValue integerValue_0 =
-                fixedGridParameters_0.getDimensionSizeValue();
-
-        integerValue_0.getQuantity().setValue(1.0);
-
-        TableChemistryDefinition tableChemistryDefinition_0 =
-                ((TableChemistryDefinition) fgmTableGenerator.getTableChemistryDefinition());
-
-        tableChemistryDefinition_0.importCaseFromChemkin(resolvePath("%s"), resolvePath("%s"), resolvePath("%s"), "", "");
-
-        TableFluidStreamCollection tableFluidStreamCollection_0 =
-                ((TableFluidStreamCollection) fgmTableGenerator.getTableFluidStreamCollection());
-
-        TableFluidStream tableFluidStream_0 =
-                ((TableFluidStream) tableFluidStreamCollection_0.getOxidizerStream());
-
-        Units units_2 =
-                ((Units) simulation.getUnitsManager().getObject("K"));
-
-        tableFluidStream_0.getTemperature().setValueAndUnits(477.0, units_2);
-
-        TableFluidStream tableFluidStream_1 =
-                ((TableFluidStream) tableFluidStreamCollection_0.getFuelStream());
-
-        tableFluidStream_1.getFluidStreamComposition().setArray(new DoubleVector(new double[] {%f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, %f, 0.0, %f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0}));
-
-        TableSpeciesForPostProcessing tableSpeciesForPostProcessing_0 =
-                ((TableSpeciesForPostProcessing) fgmTableParameters.getTableSpeciesForPostProcessing());
-
-        ((TableSpeciesGroup) tableSpeciesForPostProcessing_0.getTableSpeciesGroup()).setQuery(null);
-
-        star.material.MaterialDataBase materialMaterialDataBase_0 =
-                simulation.get(MaterialDataBaseManager.class).getMatlDataBase("Table Generator");
-
-        star.material.DataBaseMaterialManager materialDataBaseMaterialManager_0 =
-                materialMaterialDataBase_0.getFolder("Physics 1-Fgm");
-
-        star.material.DataBaseGas materialDataBaseGas_0 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("CH4_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_1 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("CO_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_2 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("CO2_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_3 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("H2O_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_4 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("N2_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_5 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("NO_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_6 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("NO2_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_7 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("O2_Gas"));
-
-        star.material.DataBaseGas materialDataBaseGas_8 =
-                ((star.material.DataBaseGas) materialDataBaseMaterialManager_0.getMaterial("OH_Gas"));
-
-        ((TableSpeciesGroup) tableSpeciesForPostProcessing_0.getTableSpeciesGroup()).setObjects(materialDataBaseGas_0, materialDataBaseGas_1, materialDataBaseGas_2, materialDataBaseGas_3, materialDataBaseGas_4, materialDataBaseGas_5, materialDataBaseGas_6, materialDataBaseGas_7, materialDataBaseGas_8);
-
-        FgmTable fgmTable_0 =
-                ((FgmTable) fgmTableGenerator.getFgmTable());
-
-        fgmTable_0.constructTable();
-
-        Boundary boundary_0 =
-                region_0.getBoundaryManager().getBoundary("Air blades");
-
-        VelocityMagnitudeProfile velocityMagnitudeProfile_0 =
-                boundary_0.getValues().get(VelocityMagnitudeProfile.class);
-
-        Units units_3 =
-                ((Units) simulation.getUnitsManager().getObject("m/s"));
-
-        velocityMagnitudeProfile_0.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_3);
-
-        Boundary boundary_1 =
-                region_0.getBoundaryManager().getBoundary("Air input");
-
-        VelocityMagnitudeProfile velocityMagnitudeProfile_1 =
-                boundary_1.getValues().get(VelocityMagnitudeProfile.class);
-
-        velocityMagnitudeProfile_1.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_3);
-
-        Boundary boundary_2 =
-                region_0.getBoundaryManager().getBoundary("CH4");
-
-        MixtureFractionArrayProfile mixtureFractionArrayProfile_0 =
-                boundary_2.getValues().get(MixtureFractionArrayProfile.class);
-
-        mixtureFractionArrayProfile_0.getMethod(ConstantArrayProfileMethod.class).getQuantity().setArray(new DoubleVector(new double[] {1.0}));
-
-        MassFlowRateProfile massFlowRateProfile_0 =
-                boundary_2.getValues().get(MassFlowRateProfile.class);
-
-        Units units_4 =
-                ((Units) simulation.getUnitsManager().getObject("kg/s"));
-
-        massFlowRateProfile_0.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_4);
-    }
-
-    private void createLinePart() {
-
-        Simulation simulation =
-                getActiveSimulation();
-
-        LabCoordinateSystem labCoordinateSystem =
-                simulation.getCoordinateSystemManager().getLabCoordinateSystem();
-
-        Units units_0 =
-                simulation.getUnitsManager().getPreferredUnits(Dimensions.Builder().length(1).build());
-
-        Region region_0 =
-                simulation.getRegionManager().getRegion("Body 1_Body");
-
-        LinePart linePart_0 =
-                simulation.getPartManager().createLinePart(new NeoObjectVector(new Object[] {}), new DoubleVector(new double[] {0.0, 0.0, 0.0}), new DoubleVector(new double[] {1.0, 0.0, 0.0}), 20);
-
-        linePart_0.getPoint1Coordinate().setCoordinateSystem(labCoordinateSystem);
-
-        linePart_0.getPoint1Coordinate().setUnits0(units_0);
-
-        linePart_0.getPoint1Coordinate().setUnits1(units_0);
-
-        linePart_0.getPoint1Coordinate().setUnits2(units_0);
-
-        linePart_0.getPoint1Coordinate().setDefinition("");
-
-        linePart_0.getPoint1Coordinate().setValue(new DoubleVector(new double[] {-10.666999816894531, 0.0, 0.0}));
-
-        linePart_0.getPoint1Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[] {-10.666999816894531, 0.0, 0.0}));
-
-        linePart_0.getPoint2Coordinate().setCoordinateSystem(labCoordinateSystem);
-
-        linePart_0.getPoint2Coordinate().setUnits0(units_0);
-
-        linePart_0.getPoint2Coordinate().setUnits1(units_0);
-
-        linePart_0.getPoint2Coordinate().setUnits2(units_0);
-
-        linePart_0.getPoint2Coordinate().setDefinition("");
-
-        linePart_0.getPoint2Coordinate().setValue(new DoubleVector(new double[] {0.009999999776482582, 0.0, 0.0}));
-
-        linePart_0.getPoint2Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[] {0.009999999776482582, 0.0, 0.0}));
-
-        linePart_0.setCoordinateSystem(labCoordinateSystem);
-
-        linePart_0.getInputParts().setQuery(null);
-
-        linePart_0.getInputParts().setObjects(region_0);
-
-        linePart_0.setResolution(150);
-
-        LinePart linePart_1 =
-                simulation.getPartManager().createLinePart(new NeoObjectVector(new Object[] {}), new DoubleVector(new double[] {0.0, 0.0, 0.0}), new DoubleVector(new double[] {1.0, 0.0, 0.0}), 20);
-
-        linePart_1.getPoint1Coordinate().setCoordinateSystem(labCoordinateSystem);
-
-        linePart_1.getPoint1Coordinate().setUnits0(units_0);
-
-        linePart_1.getPoint1Coordinate().setUnits1(units_0);
-
-        linePart_1.getPoint1Coordinate().setUnits2(units_0);
-
-        linePart_1.getPoint1Coordinate().setDefinition("");
-
-        linePart_1.getPoint1Coordinate().setValue(new DoubleVector(new double[] {-3.0, 2.0, 0.0}));
-
-        linePart_1.getPoint1Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[] {-3.0, 2.0, 0.0}));
-
-        linePart_1.getPoint2Coordinate().setCoordinateSystem(labCoordinateSystem);
-
-        linePart_1.getPoint2Coordinate().setUnits0(units_0);
-
-        linePart_1.getPoint2Coordinate().setUnits1(units_0);
-
-        linePart_1.getPoint2Coordinate().setUnits2(units_0);
-
-        linePart_1.getPoint2Coordinate().setDefinition("");
-
-        linePart_1.getPoint2Coordinate().setValue(new DoubleVector(new double[] {-3.0, -2.0, 0.0}));
-
-        linePart_1.getPoint2Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[] {-3.0, -2.0, 0.0}));
-
-        linePart_1.setCoordinateSystem(labCoordinateSystem);
-
-        linePart_1.getInputParts().setQuery(null);
-
-        linePart_1.getInputParts().setObjects(region_0);
-
-        linePart_1.setResolution(50);
-    }
-
-    private void settingPlaneSection() {
-
-        Simulation simulation =
-                getActiveSimulation();
-
-        PlaneSection planeSection_1 =
-                ((PlaneSection) simulation.getPartManager().getObject("Plane Section 2"));
-
-        Units units_0 =
-                ((Units) simulation.getUnitsManager().getObject("m"));
-
-        planeSection_1.getOriginCoordinate().setUnits1(units_0);
-
-        planeSection_1.getOriginCoordinate().setUnits2(units_0);
-
-        planeSection_1.getOriginCoordinate().setDefinition("");
-
-        planeSection_1.getOriginCoordinate().setValue(new DoubleVector(new double[] {-1.6709601589386591, 0.0, 0.0}));
-
-        planeSection_1.getOriginCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[] {-1.6709601589386591, 0.0, 0.0}));
-
-        LabCoordinateSystem labCoordinateSystem_0 =
-                simulation.getCoordinateSystemManager().getLabCoordinateSystem();
-
-        planeSection_1.getOriginCoordinate().setCoordinateSystem(labCoordinateSystem_0);
-
-        planeSection_1.getOrientationCoordinate().setUnits0(units_0);
-
-        planeSection_1.getOrientationCoordinate().setUnits1(units_0);
-
-        planeSection_1.getOrientationCoordinate().setUnits2(units_0);
-
-        planeSection_1.getOrientationCoordinate().setDefinition("");
-
-        planeSection_1.getOrientationCoordinate().setValue(new DoubleVector(new double[] {1.0, 0.0, 0.0}));
-
-        planeSection_1.getOrientationCoordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[] {1.0, 0.0, 0.0}));
-
-        planeSection_1.getOrientationCoordinate().setCoordinateSystem(labCoordinateSystem_0);
-
-        SingleValue singleValue_1 =
-                planeSection_1.getSingleValue();
-
-        singleValue_1.getValueQuantity().setValue(0.0);
-
-        singleValue_1.getValueQuantity().setUnits(units_0);
-
-        RangeMultiValue rangeMultiValue_1 =
-                planeSection_1.getRangeMultiValue();
-
-        rangeMultiValue_1.setNValues(2);
-
-        rangeMultiValue_1.getStartQuantity().setValue(0.0);
-
-        rangeMultiValue_1.getStartQuantity().setUnits(units_0);
-
-        rangeMultiValue_1.getEndQuantity().setValue(1.0);
-
-        rangeMultiValue_1.getEndQuantity().setUnits(units_0);
-
-        DeltaMultiValue deltaMultiValue_1 =
-                planeSection_1.getDeltaMultiValue();
-
-        deltaMultiValue_1.setNValues(2);
-
-        deltaMultiValue_1.getStartQuantity().setValue(0.0);
-
-        deltaMultiValue_1.getStartQuantity().setUnits(units_0);
-
-        deltaMultiValue_1.getDeltaQuantity().setValue(1.0);
-
-        deltaMultiValue_1.getDeltaQuantity().setUnits(units_0);
-
-        MultiValue multiValue_1 =
-                planeSection_1.getArbitraryMultiValue();
-
-        multiValue_1.getValueQuantities().setUnits(units_0);
-
-        multiValue_1.getValueQuantities().setArray(new DoubleVector(new double[] {0.0}));
-
-        planeSection_1.setValueMode(ValueMode.SINGLE);
-    }
-
-    private void createPlot() {
-
-        Simulation simulation =
-                getActiveSimulation();
-
-        Units units_0 =
-                ((Units) simulation.getUnitsManager().getObject("m"));
-
-        XYPlot xYPlot =
-                simulation.getPlotManager().createPlot(XYPlot.class);
-
-        PlotUpdate plotUpdate =
-                xYPlot.getPlotUpdate();
-
-        HardcopyProperties hardcopyProperties =
-                plotUpdate.getHardcopyProperties();
-
-        hardcopyProperties.setCurrentResolutionWidth(25);
-
-        hardcopyProperties.setCurrentResolutionHeight(25);
-
-        xYPlot.getParts().setQuery(null);
-
-        LinePart linePart_0 =
-                ((LinePart) simulation.getPartManager().getObject("Line Probe"));
-
-        xYPlot.getParts().setObjects(linePart_0);
-
-        AxisType axisType =
-                xYPlot.getXAxisType();
-
-        axisType.getDirectionVector().setComponentsAndUnits(-1.0, 0.0, 0.0, units_0);
-
-        YAxisType yAxisType =
-                ((YAxisType) xYPlot.getYAxes().getAxisType("Y Type 1"));
-
-        FieldFunctionUnits fieldFunctionUnits =
-                yAxisType.getScalarFunction();
-
-        PrimitiveFieldFunction primitiveFieldFunction =
-                ((PrimitiveFieldFunction) simulation.getFieldFunctionManager().getFunction("Temperature"));
-
-        fieldFunctionUnits.setFieldFunction(primitiveFieldFunction);
-    }
-
-    private void setStoppingCriterion(int maxStep) {
-
         Simulation simulation =
                 getActiveSimulation();
 
         StepStoppingCriterion stepStoppingCriterion = ((StepStoppingCriterion) simulation.getSolverStoppingCriterionManager().getSolverStoppingCriterion("Maximum Steps"));
-        stepStoppingCriterion.setMaximumNumberSteps(maxStep);
+        stepStoppingCriterion.setMaximumNumberSteps(7000);
 
-    }
+        Solution solution =
+                simulation.getSolution();
 
-        private void saveState() {
+        solution.clearSolution(Solution.Clear.History, Solution.Clear.Fields, Solution.Clear.LagrangianDem);
 
-        Simulation simulation =
-                getActiveSimulation();
+        Region region =
+                simulation.getRegionManager().getRegion("Body 1_Body");
+
+        Units units_0 =
+                ((Units) simulation.getUnitsManager().getObject("m/s"));
+
+        Units units_1 =
+                ((Units) simulation.getUnitsManager().getObject("kg/s"));
+
+        Units units_2 =
+                ((Units) simulation.getUnitsManager().getObject("K"));
+
+        Boundary boundaryAirBlades =
+                region.getBoundaryManager().getBoundary("Air blades");
+
+        VelocityMagnitudeProfile velocityMagnitudeProfileAirBlades =
+                boundaryAirBlades.getValues().get(VelocityMagnitudeProfile.class);
+
+        velocityMagnitudeProfileAirBlades.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_0);
+        boundaryAirBlades.getValues().get(StaticTemperatureProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_2);
+
+        Boundary boundaryAirInlet =
+                region.getBoundaryManager().getBoundary("Air input");
+
+        VelocityMagnitudeProfile velocityMagnitudeProfileAirInlet =
+                boundaryAirInlet.getValues().get(VelocityMagnitudeProfile.class);
+
+        velocityMagnitudeProfileAirInlet.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_0);
+        boundaryAirInlet.getValues().get(StaticTemperatureProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_2);
+
+        Boundary boundaryCH4 =
+                region.getBoundaryManager().getBoundary("CH4");
+
+        MassFlowRateProfile massFlowRateProfileCH4 =
+                boundaryCH4.getValues().get(MassFlowRateProfile.class);
+
+        massFlowRateProfileCH4.getMethod(ConstantScalarProfileMethod.class).getQuantity().setValueAndUnits(%f, units_1);
+
+
+        solution.clearSolution(Solution.Clear.History, Solution.Clear.Fields, Solution.Clear.LagrangianDem);
+
+        PhysicsContinuum physicsContinuum =
+                ((PhysicsContinuum) simulation.getContinuumManager().getContinuum("Physics 1"));
+
+        FgmTableGenerator fgmTableGenerator =
+                physicsContinuum.get(FgmTableGenerator.class);
+
+        FgmTable fgmTable =
+                ((FgmTable) fgmTableGenerator.getFgmTable());
+
+        fgmTable.deleteTable();
+
+        TableFluidStreamCollection tableFluidStreamCollection =
+                ((TableFluidStreamCollection) fgmTableGenerator.getTableFluidStreamCollection());
+
+        TableFluidStream tableFluidStream =
+                ((TableFluidStream) tableFluidStreamCollection.getOxidizerStream());
+
+        tableFluidStream.getFluidStreamComposition().setArray(new DoubleVector(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, %f, 0.0, %f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0, 0.0, 0.0, 0.0, %f, 0.0}));
+        //                                                                                  (Ar,   C, C2H, C2H2, C2H3, C2H4, C2H5, C2H6, C3H7, C3H8,  CH, CH2, CH2(S), CH2CHO, CH2CO, CH2O, CH2OH, CH3, CH3CHO, CH3O, CH3OH,    CH4,  CN,  CO,     CO2,   H,    H2, H2CN, H2O, H2O2, HCCO, HCCOH, HCN, HCNN, HCNO, HCO, HNCO, HNO, HO2, HOCN,   N,       N2,      N2O, NCO,  NH, NH2, NH3, NNH,  NO, NO2,   O,       O2,  OH)
+
+        //                tableFluidStream.getTemperature().setValueAndUnits(temperature, units_2);
+
+        TableFluidStream tableFuelStream =
+                ((TableFluidStream) tableFluidStreamCollection.getFuelStream());
+
+        tableFuelStream.getFluidStreamComposition().setArray(new DoubleVector(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
+        //                                                                                 (Ar,   C, C2H, C2H2, C2H3, C2H4, C2H5, C2H6, C3H7, C3H8,  CH, CH2, CH2(S), CH2CHO, CH2CO, CH2O, CH2OH, CH3, CH3CHO, CH3O, CH3OH,    CH4,  CN,  CO,     CO2,   H,    H2, H2CN, H2O, H2O2, HCCO, HCCOH, HCN, HCNN, HCNO, HCO, HNCO, HNO, HO2, HOCN,   N,       N2,      N2O, NCO,  NH, NH2, NH3, NNH,  NO, NO2,   O,       O2,  OH)
+
+
+        fgmTable.constructTable();
+
+        simulation.getSimulationIterator().run();
 
         simulation.saveState("%s");
-
     }
 }        
 """ % (f"macros{row}",
-         GRIMECH30_PATH,
-         THERMO30_PATH,
-         TRANSPORT_PATH,
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+13).value), #Ar
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+19).value), #C02
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+16).value), #H2
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+20).value), #H2O
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+18).value), #N2
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+15).value), #NH3
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+17).value), #O2
-         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+10).value),
-         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
-         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value),
-         f"{save_path}\\\\star{row}.sim"
+        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+10).value),
+        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+13).value),
+        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
+        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+13).value),
+        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value),
+        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+19).value), #C02
+        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+16).value), #H2
+        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+20).value), #H2O
+        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+18).value), #N2
+        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+15).value), #NH3
+        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+17).value), #O2
+        f"{save_path}\\\\star{row}.sim"
         ))
 
         fout.close()
