@@ -1,8 +1,4 @@
-from settings import EXCEL_START_ROW
-from settings import EXCEL_START_COLL
-from settings import GRIMECH30_PATH
-from settings import THERMO30_PATH
-from settings import TRANSPORT_PATH
+from configParser import Settings
 from win32com.client import Dispatch
 from win32com.client import gencache
 import pythoncom
@@ -22,12 +18,13 @@ class Methods:
             row = row + 1
 
     def checkRepeatRow(self,sheet_obj,row,coll):
+        settings = Settings()
         start_geometry = []
 
         for i in range(coll,coll+7):
             start_geometry.append(sheet_obj.cell(row=row, column=i).value)
 
-        for i in reversed(range(EXCEL_START_ROW,row)):
+        for i in reversed(range(int(settings.get_from_settings("excel_start_row")),row)):
             check_geomentry = [] 
             for j in range(coll,coll+7):
                 check_geomentry.append(sheet_obj.cell(row=i, column=j).value)
@@ -47,6 +44,8 @@ class Methods:
                 return module, api, const
         
         get_kompas_api7()
+
+        settings = Settings()
 
         module7, api7, const7 = get_kompas_api7()  # Подключаемся к API7
         app7 = api7.Application  # Получаем основной интерфейс
@@ -88,7 +87,7 @@ class Methods:
         values = []
 
         for i in range(0, 7):
-             values.append(sheet_obj.cell(row=row, column = EXCEL_START_COLL + i).value)
+             values.append(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll")) + i).value)
 
         list_collms = ['N1','L1','N2','L2','a2','N3','L3']
 
@@ -108,6 +107,7 @@ class Methods:
         kompas_document.Close(True)
 
     def macroGeomCgange(self,row,geom,sheet_obj,save_path):
+        settings = Settings()
         fout = open(f"Macroses/macros{row}.java","w")
         fout.write("""
 package macro;
@@ -691,7 +691,7 @@ public class %s extends StarMacro {
         TableChemistryDefinition tableChemistryDefinition_0 =
                 ((TableChemistryDefinition) fgmTableGenerator.getTableChemistryDefinition());
 
-        tableChemistryDefinition_0.importCaseFromChemkin(resolvePath("%s"), resolvePath("%s"), resolvePath("%s"), "", "");
+        tableChemistryDefinition_0.importCaseFromChemkin(resolvePath(%s), resolvePath(%s), resolvePath(%s), "", "");
 
         TableFluidStreamCollection tableFluidStreamCollection_0 =
                 ((TableFluidStreamCollection) fgmTableGenerator.getTableFluidStreamCollection());
@@ -1035,25 +1035,26 @@ public class %s extends StarMacro {
          """ % (
          f"macros{row}",
          f"{geom}{row}.stp",
-         GRIMECH30_PATH,
-         THERMO30_PATH,
-         TRANSPORT_PATH,
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+13).value), #Ar
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+19).value), #C02
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+16).value), #H2
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+20).value), #H2O
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+18).value), #N2
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+15).value), #NH3
-         float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+17).value), #O2
-         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+10).value),
-         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
-         float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value),
+         settings.get_from_settings('grimech30_path'),
+         settings.get_from_settings('thermo30_path'),
+         settings.get_from_settings('transport_path'),
+         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+13).value), #Ar
+         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+19).value), #C02
+         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+16).value), #H2
+         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+20).value), #H2O
+         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+18).value), #N2
+         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+15).value), #NH3
+         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+17).value), #O2
+         float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+10).value),
+         float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+11).value),
+         float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+12).value),
          f"{save_path}\\\\star{row}.sim"
          ))
         
         fout.close()
 
     def macroGeomDontChange(self,row,sheet_obj,save_path):
+        settings = Settings()
         fout = open(f"Macroses/macros{row}.java","w")
         fout.write("""
 package macro;
@@ -1187,17 +1188,17 @@ public class %s extends StarMacro {
     }
 }        
 """ % (f"macros{row}",
-        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+10).value),
-        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+13).value),
-        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+11).value),
-        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+13).value),
-        float(sheet_obj.cell(row=row, column = EXCEL_START_COLL+12).value),
-        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+19).value), #C02
-        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+16).value), #H2
-        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+20).value), #H2O
-        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+18).value), #N2
-        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+15).value), #NH3
-        float(sheet_obj.cell(row=row, column=EXCEL_START_COLL+17).value), #O2
+        float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+10).value),
+        float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+13).value),
+        float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+11).value),
+        float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+13).value),
+        float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+12).value),
+        float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+19).value), #C02
+        float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+16).value), #H2
+        float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+20).value), #H2O
+        float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+18).value), #N2
+        float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+15).value), #NH3
+        float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+17).value), #O2
         f"{save_path}\\\\star{row}.sim"
         ))
 
