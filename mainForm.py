@@ -45,7 +45,7 @@ def btnOkClicked():
     print(row_number)
     
 
-    for i in range(4):
+    for i in range(row_number):
         repeat_row = methods.checkRepeatRow(sheet_obj,EXCEL_START_ROW+i,EXCEL_START_COLL)
 
         if repeat_row == 0:
@@ -55,17 +55,17 @@ def btnOkClicked():
                                     sheet_obj,
                                     lblSave.cget('text').replace('/','\\\\'))
 
-            # sim = lblSave.cget('text').replace('/','\\')+'\\'
-            # sim = f"{sim}star.sim"
-            # java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
-            # os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
+            sim = lblSave.cget('text').replace('/','\\')+'\\'
+            sim = f"{sim}star.sim"
+            java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
+            os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
         
         else:
             methods.macroGeomDontChange(EXCEL_START_ROW+i,sheet_obj,lblSave.cget('text').replace('/','\\\\'))
-            # sim = lblSave.cget('text').replace('/','\\')+'\\'
-            # sim = f"{sim}star{repeat_row}.sim"
-            # java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
-            # os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
+            sim = lblSave.cget('text').replace('/','\\')+'\\'
+            sim = f"{sim}star{repeat_row}.sim"
+            java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
+            os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
 
 
 window = Tk()
