@@ -8,61 +8,131 @@ from configParser import Settings
 
 def settingsClick():
 
+    def changeTxt(txt,value):
+        txt.delete(0,END)
+        txt.insert(0,value)
+
+    def btnGrimech30Path():
+        file = fd.askopenfilename()
+        file = file.replace('/','\\\\')
+        changeTxt(txtGrimech30Path,f'"{file}"')
+    
+    def btnThermo30Path():
+        file = fd.askopenfilename()
+        file = file.replace('/','\\\\')
+        changeTxt(txtThermo30Path,f'"{file}"')
+
+    def btnTransportPath():
+        file = fd.askopenfilename()
+        file = file.replace('/','\\\\')
+        changeTxt(txtTransportPath,f'"{file}"')
+
+    def btnStarPath():
+        file = fd.askopenfilename()
+        file = file.replace('/','\\\\')
+        changeTxt(txtStarPath,f'"{file}"')
+
+    def btnMacrosPath():
+        file = fd.askdirectory()
+        file = file.replace('/','\\\\')+"\\\\"
+        changeTxt(txtMacrosPath,f'"{file}"')
+
+    def btnSaveConfig():
+        settings.set_to_settings('excel_start_row',txtExcelStartRow.get())
+        settings.set_to_settings('excel_start_coll',txtExcelStartColl.get())
+        settings.set_to_settings('grimech30_path',txtGrimech30Path.get())
+        settings.set_to_settings('thermo30_path',txtThermo30Path.get())
+        settings.set_to_settings('transport_path',txtTransportPath.get())
+        settings.set_to_settings('star_path',txtStarPath.get())
+        settings.set_to_settings('macros_path',txtMacrosPath.get())
+        settings.set_to_settings('core_number',txtCoreNumber.get())
+   
     settings = Settings()
 
     settingsWindow = Toplevel(window)
  
     settingsWindow.title("Настройки")
  
-    settingsWindow.geometry("300x500")
+    settingsWindow.geometry("400x500")
 
     lblExcelStartRow = Label(settingsWindow,text='Стартовая строка Excel')
     lblExcelStartRow.grid(row = 0,column = 0)
 
     txtExcelStartRow = Entry(settingsWindow,width=5)
+    txtExcelStartRow.insert(0,settings.get_from_settings("excel_start_row"))
     txtExcelStartRow.grid(row = 0,column = 1)
 
     lblExcelStartColl = Label(settingsWindow,text='Стартовая колонка Excel')
     lblExcelStartColl.grid(row = 1,column = 0)
 
     txtExcelStartColl = Entry(settingsWindow,width=5)
+    txtExcelStartColl.insert(0,settings.get_from_settings("excel_start_coll"))
     txtExcelStartColl.grid(row = 1,column = 1)
 
+    #Grimech30____________
     lblGrimech30Path = Label(settingsWindow,text='Путь Grimech30')
     lblGrimech30Path.grid(row = 2,column = 0)
 
-    txtGrimech30Path = Entry(settingsWindow,width=5)
+    txtGrimech30Path = Entry(settingsWindow,width=20)
+    txtGrimech30Path.insert(0,settings.get_from_settings('grimech30_path'))
     txtGrimech30Path.grid(row = 2,column = 1)
 
+    btnGrimech30Path = Button(settingsWindow,text='...',command=btnGrimech30Path)
+    btnGrimech30Path.grid(row=2,column=3)
+
+    #Thermo30____________
     lblThermo30Path = Label(settingsWindow,text='Путь Thermo30')
     lblThermo30Path.grid(row = 3,column = 0)
 
-    txtThermo30Path = Entry(settingsWindow,width=5)
+    txtThermo30Path = Entry(settingsWindow,width=20)
+    txtThermo30Path.insert(0,settings.get_from_settings('thermo30_path'))
     txtThermo30Path.grid(row = 3,column = 1)
 
+    btnThermo30Path = Button(settingsWindow,text='...',command=btnThermo30Path)
+    btnThermo30Path.grid(row=3,column=3)
+
+    #Transport____________
     lblTransportPath = Label(settingsWindow,text='Путь Transport')
     lblTransportPath.grid(row = 4,column = 0)
 
-    txtTransportPath = Entry(settingsWindow,width=5)
+    txtTransportPath = Entry(settingsWindow,width=20)
+    txtTransportPath.insert(0,settings.get_from_settings('transport_path'))
     txtTransportPath.grid(row = 4,column = 1)
 
+    btnTransportPath = Button(settingsWindow,text='...',command=btnTransportPath)
+    btnTransportPath.grid(row=4,column=3)
+
+    #star-ccm+____________
     lblStarPath = Label(settingsWindow,text='Путь к star-ccm+')
     lblStarPath.grid(row = 5,column = 0)
 
-    txtStarPath = Entry(settingsWindow,width=5)
+    txtStarPath = Entry(settingsWindow,width=20)
+    txtStarPath.insert(0,settings.get_from_settings('star_path'))
     txtStarPath.grid(row = 5,column = 1)
 
+    btnStarPath = Button(settingsWindow,text='...',command=btnStarPath)
+    btnStarPath.grid(row=5,column=3)
+
+    #папка с макросами____________
     lblMacrosPath = Label(settingsWindow,text='Путь к папке с макросами')
     lblMacrosPath.grid(row = 6,column = 0)
 
-    txtMacrosPath = Entry(settingsWindow,width=5)
+    txtMacrosPath = Entry(settingsWindow,width=20)
+    txtMacrosPath.insert(0,settings.get_from_settings('macros_path'))
     txtMacrosPath.grid(row = 6,column = 1)
+
+    btnMacrosPath = Button(settingsWindow,text='...',command=btnMacrosPath)
+    btnMacrosPath.grid(row=6,column=3)
 
     lblCoreNumber = Label(settingsWindow,text='Количество ядер')
     lblCoreNumber.grid(row = 7,column = 0)
 
     txtCoreNumber = Entry(settingsWindow,width=5)
+    txtCoreNumber.insert(0,settings.get_from_settings('core_number'))
     txtCoreNumber.grid(row = 7,column = 1)
+
+    btnSaveConfig = Button(settingsWindow,text='Save Config',command=btnSaveConfig)
+    btnSaveConfig.grid(row=10,column=3)
 
 
 
