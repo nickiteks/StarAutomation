@@ -28,6 +28,12 @@ def btnOkClicked():
     
     Определение повторяющейся геометрии
 
+    Если геометрия не повторялась строим новую и выполняем все расчеты
+
+    Если геометрия повторялась подгружаем ее и меняем значения
+
+    ВАЖНО!!!!! базовый фал стара должен лежать в папке сохранения и называться star.sim
+
     """
     wb_obj = openpyxl.load_workbook(lblExcel.cget('text'))
     sheet_obj = wb_obj.active
@@ -37,23 +43,30 @@ def btnOkClicked():
     row_number = methods.numberOfcullums(sheet_obj,EXCEL_START_ROW,EXCEL_START_COLL)
 
     print(row_number)
-
-    repeat_row = methods.checkRepeatRow(sheet_obj,13,EXCEL_START_COLL)
-
-    print(repeat_row)
     
 
-    for i in range(2):
-        methods.changeGeom(lblGeom.cget('text'),sheet_obj,EXCEL_START_ROW+i)
-        methods.macroGeomCgange(EXCEL_START_ROW + i,
-                                lblGeom.cget('text')[:-4].replace('/','\\\\'),
-                                sheet_obj,
-                                lblSave.cget('text').replace('/','\\\\'))
+    for i in range(4):
+        repeat_row = methods.checkRepeatRow(sheet_obj,EXCEL_START_ROW+i,EXCEL_START_COLL)
 
-        sim = lblSave.cget('text').replace('/','\\')+'\\'
-        sim = f"{sim}star.sim"
-        java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
-        os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
+        if repeat_row == 0:
+            methods.changeGeom(lblGeom.cget('text'),sheet_obj,EXCEL_START_ROW+i)
+            methods.macroGeomCgange(EXCEL_START_ROW + i,
+                                    lblGeom.cget('text')[:-4].replace('/','\\\\'),
+                                    sheet_obj,
+                                    lblSave.cget('text').replace('/','\\\\'))
+
+            # sim = lblSave.cget('text').replace('/','\\')+'\\'
+            # sim = f"{sim}star.sim"
+            # java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
+            # os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
+        
+        else:
+            methods.macroGeomDontChange(EXCEL_START_ROW+i,sheet_obj,lblSave.cget('text').replace('/','\\\\'))
+            # sim = lblSave.cget('text').replace('/','\\')+'\\'
+            # sim = f"{sim}star{repeat_row}.sim"
+            # java = f"{MACROS_PATH}macros{EXCEL_START_ROW + i}.java"
+            # os.system(f'start /wait cmd /c " cd {STAR_PATH} & starccm+ -locale en -np 8 {sim} -batch {java}"')
+
 
 window = Tk()
 
