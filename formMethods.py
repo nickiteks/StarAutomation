@@ -43,7 +43,6 @@ class Methods:
                 const = gencache.EnsureModule("{75C9F5D0-B5B8-4526-8681-9903C567D2ED}", 0, 1, 0).constants
                 return module, api, const
         
-        get_kompas_api7()
 
         settings = Settings()
 
@@ -327,7 +326,7 @@ public class %s extends StarMacro {
                 ((SimpleCylinderPart) simulation.get(SimulationPartManager.class).getPart("Cylinder 3"));
 
         SolidModelPart solidModelPart_0 =
-                ((SolidModelPart) simulation.get(SimulationPartManager.class).getPart("Body 1_Body"));
+                ((SolidModelPart) simulation.get(SimulationPartManager.class).getPart("Body 1"));
 
         AutoMeshOperation autoMeshOperation_0 =
                 simulation.get(MeshOperationManager.class).createAutoMeshOperation(new StringVector(new String[]{"star.resurfacer.ResurfacerAutoMesher", "star.dualmesher.DualAutoMesher"}), new NeoObjectVector(new Object[]{solidModelPart_0}));
@@ -431,12 +430,12 @@ public class %s extends StarMacro {
                 getActiveSimulation();
 
         SolidModelPart solidModelPart =
-                ((SolidModelPart) simulation.get(SimulationPartManager.class).getPart("Body 1_Body"));
+                ((SolidModelPart) simulation.get(SimulationPartManager.class).getPart("Body 1"));
 
         simulation.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{solidModelPart}), "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null, "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY, "OneEdgeBoundaryPerPart", null);
 
         Region region_0 =
-                simulation.getRegionManager().getRegion("Body 1_Body");
+                simulation.getRegionManager().getRegion("Body 1");
 
         Boundary boundary_0 =
                 region_0.getBoundaryManager().getBoundary("Air blades");
@@ -490,7 +489,7 @@ public class %s extends StarMacro {
                 simulation.getUnitsManager().getPreferredUnits(Dimensions.Builder().length(1).build());
 
         Region region =
-                simulation.getRegionManager().getRegion("Body 1_Body");
+                simulation.getRegionManager().getRegion("Body 1");
 
         PlaneSection planeSection =
                 (PlaneSection) simulation.getPartManager().createImplicitPart(new NeoObjectVector(new Object[] {}), new DoubleVector(new double[] {0.0, 0.0, 1.0}), new DoubleVector(new double[] {0.0, 0.0, 0.0}), 0, 1, new DoubleVector(new double[] {0.0}));
@@ -662,7 +661,7 @@ public class %s extends StarMacro {
                 ((PhysicsContinuum) simulation.getContinuumManager().getContinuum("Physics 1"));
 
         Region region_0 =
-                simulation.getRegionManager().getRegion("Body 1_Body");
+                simulation.getRegionManager().getRegion("Body 1");
 
         FgmTableGenerator fgmTableGenerator =
                 physicsContinuum.get(FgmTableGenerator.class);
@@ -804,7 +803,7 @@ public class %s extends StarMacro {
                 simulation.getUnitsManager().getPreferredUnits(Dimensions.Builder().length(1).build());
 
         Region region_0 =
-                simulation.getRegionManager().getRegion("Body 1_Body");
+                simulation.getRegionManager().getRegion("Body 1");
 
         LinePart linePart_0 =
                 simulation.getPartManager().createLinePart(new NeoObjectVector(new Object[] {}), new DoubleVector(new double[] {0.0, 0.0, 0.0}), new DoubleVector(new double[] {1.0, 0.0, 0.0}), 20);
@@ -1111,7 +1110,7 @@ public class %s extends StarMacro {
         solution.clearSolution(Solution.Clear.History, Solution.Clear.Fields, Solution.Clear.LagrangianDem);
 
         Region region =
-                simulation.getRegionManager().getRegion("Body 1_Body");
+                simulation.getRegionManager().getRegion("Body 1");
 
         Units units_0 =
                 ((Units) simulation.getUnitsManager().getObject("m/s"));
