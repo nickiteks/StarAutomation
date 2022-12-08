@@ -1175,14 +1175,12 @@ public class %s extends StarMacro {
         TableFluidStream tableFuelStream =
                 ((TableFluidStream) tableFluidStreamCollection.getFuelStream());
 
-        tableFuelStream.getFluidStreamComposition().setArray(new DoubleVector(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
+        tableFuelStream.getFluidStreamComposition().setArray(new DoubleVector(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
         //                                                                                 (Ar,   C, C2H, C2H2, C2H3, C2H4, C2H5, C2H6, C3H7, C3H8,  CH, CH2, CH2(S), CH2CHO, CH2CO, CH2O, CH2OH, CH3, CH3CHO, CH3O, CH3OH,    CH4,  CN,  CO,     CO2,   H,    H2, H2CN, H2O, H2O2, HCCO, HCCOH, HCN, HCNN, HCNO, HCO, HNCO, HNO, HO2, HOCN,   N,       N2,      N2O, NCO,  NH, NH2, NH3, NNH,  NO, NO2,   O,       O2,  OH)
 
 
         fgmTable.constructTable();
-
         simulation.getSimulationIterator().run();
-
         simulation.saveState("%s");
     }
 }        
