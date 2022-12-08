@@ -2,8 +2,29 @@ from configParser import Settings
 from win32com.client import Dispatch
 from win32com.client import gencache
 import pythoncom
+import pandas as pd
 
 class Methods:
+
+    def reportGenerate(self,row,sheet_obj,coll):
+        excel_data = []
+
+        for i in range(coll,coll+20):
+            excel_data.append(sheet_obj.cell(row=row, column=i).value)
+        
+        print(excel_data)
+
+        data = pd.read_csv(f'csv\star{row}.csv')
+        print(data)
+
+        print(data.head)
+
+        for i in data:
+            print(i+'\n')
+
+        list_of_max = data.max()[0]
+
+        print(list_of_max)
 
     def numberOfcullums(self,sheet_obj,row_start,coll):
         row_number = 0
@@ -107,9 +128,25 @@ class Methods:
 
     def macroGeomCgange(self,row,geom,sheet_obj,save_path):
         settings = Settings()
+
+        saveCSV = settings.get_from_settings('csv_path')
+        saveCSV = saveCSV.replace('"','')
+        saveCSV = saveCSV + f'star{row}.csv'
+
         fout = open(f"Macroses/macros{row}.java","w")
         fout.write("""
 package macro;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+
+import star.common.*;
+import star.base.neo.*;
+import star.vis.*;
+
+import javax.swing.table.TableModel;
 
 import star.amr.AmrModel;
 import star.base.neo.DoubleVector;
@@ -162,7 +199,9 @@ public class %s extends StarMacro {
         settingPlaneSection();
         createPlot();
         setStoppingCriterion(7000);
+        saveCSV();
         saveState();
+        
     }
 
     private void importGeometry() {
@@ -1030,6 +1069,182 @@ public class %s extends StarMacro {
         simulation.saveState("%s");
 
     }
+
+    private void saveCSV(){
+        Simulation simulation_0 =
+                getActiveSimulation();
+
+        LinePart linePart_3 =
+                simulation_0.getPartManager().createLinePart(new NeoObjectVector(new Object[]{}), new DoubleVector(new double[]{0.0, 0.0, 0.0}), new DoubleVector(new double[]{1.0, 0.0, 0.0}), 20);
+
+        simulation_0.getPartManager().removeObjects(linePart_3);
+
+        Units units_0 =
+                simulation_0.getUnitsManager().getPreferredUnits(Dimensions.Builder().length(1).build());
+
+        Region region_0 =
+                simulation_0.getRegionManager().getRegion("Body 1");
+
+        LinePart linePart_4 =
+                simulation_0.getPartManager().createLinePart(new NeoObjectVector(new Object[]{}), new DoubleVector(new double[]{0.0, 0.0, 0.0}), new DoubleVector(new double[]{1.0, 0.0, 0.0}), 20);
+
+        LabCoordinateSystem labCoordinateSystem_0 =
+                simulation_0.getCoordinateSystemManager().getLabCoordinateSystem();
+
+        linePart_4.getPoint1Coordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        linePart_4.getPoint1Coordinate().setUnits0(units_0);
+
+        linePart_4.getPoint1Coordinate().setUnits1(units_0);
+
+        linePart_4.getPoint1Coordinate().setUnits2(units_0);
+
+        linePart_4.getPoint1Coordinate().setDefinition("");
+
+        linePart_4.getPoint1Coordinate().setValue(new DoubleVector(new double[]{-10.667000000000002, 0.0, 0.0}));
+
+        linePart_4.getPoint1Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-10.667000000000002, 0.0, 0.0}));
+
+        linePart_4.getPoint2Coordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        linePart_4.getPoint2Coordinate().setUnits0(units_0);
+
+        linePart_4.getPoint2Coordinate().setUnits1(units_0);
+
+        linePart_4.getPoint2Coordinate().setUnits2(units_0);
+
+        linePart_4.getPoint2Coordinate().setDefinition("");
+
+        linePart_4.getPoint2Coordinate().setValue(new DoubleVector(new double[]{0.010000000000499883, 0.0, 0.0}));
+
+        linePart_4.getPoint2Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{0.010000000000499883, 0.0, 0.0}));
+
+        linePart_4.setCoordinateSystem(labCoordinateSystem_0);
+
+        linePart_4.getInputParts().setQuery(null);
+
+        linePart_4.getInputParts().setObjects(region_0);
+
+        linePart_4.setResolution(150);
+
+        XYPlot xYPlot_2 =
+                simulation_0.getPlotManager().createPlot(XYPlot.class);
+
+        PlotUpdate plotUpdate_0 =
+                xYPlot_2.getPlotUpdate();
+
+        HardcopyProperties hardcopyProperties_1 =
+                plotUpdate_0.getHardcopyProperties();
+
+        hardcopyProperties_1.setCurrentResolutionWidth(1277);
+
+        hardcopyProperties_1.setCurrentResolutionHeight(809);
+
+        xYPlot_2.getParts().setQuery(null);
+
+        xYPlot_2.getParts().setObjects(linePart_4);
+
+        AxisType axisType_0 =
+                xYPlot_2.getXAxisType();
+
+        axisType_0.getDirectionVector().setComponentsAndUnits(-1.0, 0.0, 0.0, units_0);
+
+        YAxisType yAxisType_0 =
+                ((YAxisType) xYPlot_2.getYAxes().getAxisType("Y Type 1"));
+
+        FieldFunctionUnits fieldFunctionUnits_0 =
+                yAxisType_0.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_0 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("Temperature"));
+
+        fieldFunctionUnits_0.setFieldFunction(primitiveFieldFunction_0);
+
+        YAxisType yAxisType_1 =
+                xYPlot_2.getYAxes().createAxisType();
+
+        FieldFunctionUnits fieldFunctionUnits_1 =
+                yAxisType_1.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_1 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("NitrogenOxide"));
+
+        fieldFunctionUnits_1.setFieldFunction(primitiveFieldFunction_1);
+
+        YAxisType yAxisType_2 =
+                xYPlot_2.getYAxes().createAxisType();
+
+        FieldFunctionUnits fieldFunctionUnits_2 =
+                yAxisType_2.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_2 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("MassFractionCO"));
+
+        fieldFunctionUnits_2.setFieldFunction(primitiveFieldFunction_2);
+
+        YAxisType yAxisType_3 =
+                xYPlot_2.getYAxes().createAxisType();
+
+        FieldFunctionUnits fieldFunctionUnits_3 =
+                yAxisType_3.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_3 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("MassFractionH2O"));
+
+        fieldFunctionUnits_3.setFieldFunction(primitiveFieldFunction_3);
+
+        Cartesian2DAxisManager cartesian2DAxisManager_0 =
+                ((Cartesian2DAxisManager) xYPlot_2.getAxisManager());
+
+        cartesian2DAxisManager_0.setAxesBounds(new Vector(Arrays.<AxisManager.AxisBounds>asList(new AxisManager.AxisBounds("Left Axis", 1.6189140731511915E-16, false, 1922.6049917012276, false), new AxisManager.AxisBounds("Bottom Axis", 0.061179999999502854, false, 10.595819999999998, false))));
+
+        TableModel tm = xYPlot_2.getTableModel();
+
+        try {
+
+            File f = new File(simulation_0.getSessionPath());
+            String fileName = %s;
+            exportCSV(simulation_0, tm, fileName, ";", ",");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static void exportCSV(Simulation simulation, TableModel tm, String fileName, String delimetr, String doubleDelimetr) throws IOException {
+        FileWriter csvWriter = new FileWriter(fileName);
+
+        String header = "";
+        for (int i = 0; i < tm.getColumnCount(); i ++) {
+            if (i > 0) {
+                header = header + delimetr + tm.getColumnName(i);
+            } else {
+                header = header + tm.getColumnName(i);
+            }
+        }
+
+        //simulation.println(header);
+        csvWriter.append(header);
+        csvWriter.append(\"\\n\");
+
+        for (int i = 0; i < tm.getRowCount(); i ++) {
+            String data = "";
+            for (int j = 0; j < tm.getColumnCount(); j++) {
+                if (j > 0) {
+                    data = data + ";" + tm.getValueAt(i, j);
+                } else {
+                    data = data + tm.getValueAt(i, j);
+                }
+            }
+            data = data.replace(".", doubleDelimetr);
+            //simulation.println(data);
+            csvWriter.append(data);
+            csvWriter.append(\"\\n\");
+        }
+
+        csvWriter.flush();
+        csvWriter.close();
+    }
 }       
          """ % (
          f"macros{row}",
@@ -1047,16 +1262,34 @@ public class %s extends StarMacro {
          float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+10).value),
          float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+11).value),
          float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+12).value),
-         f"{save_path}\\\\star{row}.sim"
+         f"{save_path}\\\\star{row}.sim",
+         f'"{saveCSV}"'
          ))
         
         fout.close()
 
     def macroGeomDontChange(self,row,sheet_obj,save_path):
         settings = Settings()
+
+        saveCSV = settings.get_from_settings('csv_path')
+        saveCSV = saveCSV.replace('"','')
+        saveCSV = saveCSV + f'star{row}.csv'
+
         fout = open(f"Macroses/macros{row}.java","w")
         fout.write("""
 package macro;
+
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+
+import star.common.*;
+import star.base.neo.*;
+import star.vis.*;
+
+import javax.swing.table.TableModel;
 
 import star.amr.AmrModel;
 import star.base.neo.DoubleVector;
@@ -1181,7 +1414,183 @@ public class %s extends StarMacro {
 
         fgmTable.constructTable();
         simulation.getSimulationIterator().run();
+        saveCSV();
         simulation.saveState("%s");
+    }
+    private void saveCSV(){
+        Simulation simulation_0 =
+                getActiveSimulation();
+
+        LinePart linePart_3 =
+                simulation_0.getPartManager().createLinePart(new NeoObjectVector(new Object[]{}), new DoubleVector(new double[]{0.0, 0.0, 0.0}), new DoubleVector(new double[]{1.0, 0.0, 0.0}), 20);
+
+        simulation_0.getPartManager().removeObjects(linePart_3);
+
+        Units units_0 =
+                simulation_0.getUnitsManager().getPreferredUnits(Dimensions.Builder().length(1).build());
+
+        Region region_0 =
+                simulation_0.getRegionManager().getRegion("Body 1");
+
+        LinePart linePart_4 =
+                simulation_0.getPartManager().createLinePart(new NeoObjectVector(new Object[]{}), new DoubleVector(new double[]{0.0, 0.0, 0.0}), new DoubleVector(new double[]{1.0, 0.0, 0.0}), 20);
+
+        LabCoordinateSystem labCoordinateSystem_0 =
+                simulation_0.getCoordinateSystemManager().getLabCoordinateSystem();
+
+        linePart_4.getPoint1Coordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        linePart_4.getPoint1Coordinate().setUnits0(units_0);
+
+        linePart_4.getPoint1Coordinate().setUnits1(units_0);
+
+        linePart_4.getPoint1Coordinate().setUnits2(units_0);
+
+        linePart_4.getPoint1Coordinate().setDefinition("");
+
+        linePart_4.getPoint1Coordinate().setValue(new DoubleVector(new double[]{-10.667000000000002, 0.0, 0.0}));
+
+        linePart_4.getPoint1Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-10.667000000000002, 0.0, 0.0}));
+
+        linePart_4.getPoint2Coordinate().setCoordinateSystem(labCoordinateSystem_0);
+
+        linePart_4.getPoint2Coordinate().setUnits0(units_0);
+
+        linePart_4.getPoint2Coordinate().setUnits1(units_0);
+
+        linePart_4.getPoint2Coordinate().setUnits2(units_0);
+
+        linePart_4.getPoint2Coordinate().setDefinition("");
+
+        linePart_4.getPoint2Coordinate().setValue(new DoubleVector(new double[]{0.010000000000499883, 0.0, 0.0}));
+
+        linePart_4.getPoint2Coordinate().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{0.010000000000499883, 0.0, 0.0}));
+
+        linePart_4.setCoordinateSystem(labCoordinateSystem_0);
+
+        linePart_4.getInputParts().setQuery(null);
+
+        linePart_4.getInputParts().setObjects(region_0);
+
+        linePart_4.setResolution(150);
+
+        XYPlot xYPlot_2 =
+                simulation_0.getPlotManager().createPlot(XYPlot.class);
+
+        PlotUpdate plotUpdate_0 =
+                xYPlot_2.getPlotUpdate();
+
+        HardcopyProperties hardcopyProperties_1 =
+                plotUpdate_0.getHardcopyProperties();
+
+        hardcopyProperties_1.setCurrentResolutionWidth(1277);
+
+        hardcopyProperties_1.setCurrentResolutionHeight(809);
+
+        xYPlot_2.getParts().setQuery(null);
+
+        xYPlot_2.getParts().setObjects(linePart_4);
+
+        AxisType axisType_0 =
+                xYPlot_2.getXAxisType();
+
+        axisType_0.getDirectionVector().setComponentsAndUnits(-1.0, 0.0, 0.0, units_0);
+
+        YAxisType yAxisType_0 =
+                ((YAxisType) xYPlot_2.getYAxes().getAxisType("Y Type 1"));
+
+        FieldFunctionUnits fieldFunctionUnits_0 =
+                yAxisType_0.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_0 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("Temperature"));
+
+        fieldFunctionUnits_0.setFieldFunction(primitiveFieldFunction_0);
+
+        YAxisType yAxisType_1 =
+                xYPlot_2.getYAxes().createAxisType();
+
+        FieldFunctionUnits fieldFunctionUnits_1 =
+                yAxisType_1.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_1 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("NitrogenOxide"));
+
+        fieldFunctionUnits_1.setFieldFunction(primitiveFieldFunction_1);
+
+        YAxisType yAxisType_2 =
+                xYPlot_2.getYAxes().createAxisType();
+
+        FieldFunctionUnits fieldFunctionUnits_2 =
+                yAxisType_2.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_2 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("MassFractionCO"));
+
+        fieldFunctionUnits_2.setFieldFunction(primitiveFieldFunction_2);
+
+        YAxisType yAxisType_3 =
+                xYPlot_2.getYAxes().createAxisType();
+
+        FieldFunctionUnits fieldFunctionUnits_3 =
+                yAxisType_3.getScalarFunction();
+
+        PrimitiveFieldFunction primitiveFieldFunction_3 =
+                ((PrimitiveFieldFunction) simulation_0.getFieldFunctionManager().getFunction("MassFractionH2O"));
+
+        fieldFunctionUnits_3.setFieldFunction(primitiveFieldFunction_3);
+
+        Cartesian2DAxisManager cartesian2DAxisManager_0 =
+                ((Cartesian2DAxisManager) xYPlot_2.getAxisManager());
+
+        cartesian2DAxisManager_0.setAxesBounds(new Vector(Arrays.<AxisManager.AxisBounds>asList(new AxisManager.AxisBounds("Left Axis", 1.6189140731511915E-16, false, 1922.6049917012276, false), new AxisManager.AxisBounds("Bottom Axis", 0.061179999999502854, false, 10.595819999999998, false))));
+
+        TableModel tm = xYPlot_2.getTableModel();
+
+        try {
+
+            File f = new File(simulation_0.getSessionPath());
+            String fileName = %s;
+            exportCSV(simulation_0, tm, fileName, ";", ",");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static void exportCSV(Simulation simulation, TableModel tm, String fileName, String delimetr, String doubleDelimetr) throws IOException {
+        FileWriter csvWriter = new FileWriter(fileName);
+
+        String header = "";
+        for (int i = 0; i < tm.getColumnCount(); i ++) {
+            if (i > 0) {
+                header = header + delimetr + tm.getColumnName(i);
+            } else {
+                header = header + tm.getColumnName(i);
+            }
+        }
+
+        //simulation.println(header);
+        csvWriter.append(header);
+        csvWriter.append(\"\\n\");
+
+        for (int i = 0; i < tm.getRowCount(); i ++) {
+            String data = "";
+            for (int j = 0; j < tm.getColumnCount(); j++) {
+                if (j > 0) {
+                    data = data + ";" + tm.getValueAt(i, j);
+                } else {
+                    data = data + tm.getValueAt(i, j);
+                }
+            }
+            data = data.replace(".", doubleDelimetr);
+            //simulation.println(data);
+            csvWriter.append(data);
+            csvWriter.append(\"\\n\");
+        }
+
+        csvWriter.flush();
+        csvWriter.close();
     }
 }        
 """ % (f"macros{row}",
@@ -1196,7 +1605,8 @@ public class %s extends StarMacro {
         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+18).value), #N2
         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+15).value), #NH3
         float(sheet_obj.cell(row=row, column=int(settings.get_from_settings("excel_start_coll"))+17).value), #O2
-        f"{save_path}\\\\star{row}.sim"
+        f"{save_path}\\\\star{row}.sim",
+        f'"{saveCSV}"'
         ))
 
         fout.close()

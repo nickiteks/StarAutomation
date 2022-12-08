@@ -37,6 +37,12 @@ def settingsClick():
         file = file.replace('/','\\\\')+"\\\\"
         changeTxt(txtMacrosPath,f'"{file}"')
 
+    def btnCSVPath():
+        file = fd.askdirectory()
+        file = file.replace('/','\\\\')+"\\\\"
+        changeTxt(txtCSVPath,f'"{file}"')
+
+
     def btnSaveConfig():
         settings.set_to_settings('excel_start_row',txtExcelStartRow.get())
         settings.set_to_settings('excel_start_coll',txtExcelStartColl.get())
@@ -45,6 +51,7 @@ def settingsClick():
         settings.set_to_settings('transport_path',txtTransportPath.get())
         settings.set_to_settings('star_path',txtStarPath.get())
         settings.set_to_settings('macros_path',txtMacrosPath.get())
+        settings.set_to_settings('csv_path',txtCSVPath.get())
         settings.set_to_settings('core_number',txtCoreNumber.get())
    
     settings = Settings()
@@ -124,12 +131,23 @@ def settingsClick():
     btnMacrosPath = Button(settingsWindow,text='...',command=btnMacrosPath)
     btnMacrosPath.grid(row=6,column=3)
 
+    #папка с csv____________
+    lblCSVPath = Label(settingsWindow,text='Путь к папке с CSV')
+    lblCSVPath.grid(row = 7,column = 0)
+
+    txtCSVPath = Entry(settingsWindow,width=20)
+    txtCSVPath.insert(0,settings.get_from_settings('csv_path'))
+    txtCSVPath.grid(row = 7,column = 1)
+
+    btntxtCSVPath = Button(settingsWindow,text='...',command=btnCSVPath)
+    btntxtCSVPath.grid(row=7,column=3)
+
     lblCoreNumber = Label(settingsWindow,text='Количество ядер')
-    lblCoreNumber.grid(row = 7,column = 0)
+    lblCoreNumber.grid(row = 8,column = 0)
 
     txtCoreNumber = Entry(settingsWindow,width=5)
     txtCoreNumber.insert(0,settings.get_from_settings('core_number'))
-    txtCoreNumber.grid(row = 7,column = 1)
+    txtCoreNumber.grid(row = 8,column = 1)
 
     btnSaveConfig = Button(settingsWindow,text='Save Config',command=btnSaveConfig)
     btnSaveConfig.grid(row=10,column=3)
@@ -174,11 +192,9 @@ def btnOkClicked():
     row_number = methods.numberOfcullums(sheet_obj,
                                          int(settings.get_from_settings("excel_start_row")),
                                          int(settings.get_from_settings("excel_start_coll")))
-
-    print(row_number)
     
 
-    for i in range(row_number):
+    for i in range(0,1):
         repeat_row = methods.checkRepeatRow(sheet_obj,
                                             int(settings.get_from_settings("excel_start_row"))+i,
                                             int(settings.get_from_settings("excel_start_coll")))
@@ -194,6 +210,7 @@ def btnOkClicked():
             sim = f"{sim}star.sim"
             java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
             os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+
         
         else:
             methods.macroGeomDontChange(int(settings.get_from_settings("excel_start_row"))+i,sheet_obj,lblSave.cget('text').replace('/','\\\\'))
@@ -201,6 +218,10 @@ def btnOkClicked():
             sim = f"{sim}star{repeat_row}.sim"
             java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
             os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+
+        methods.reportGenerate(int(settings.get_from_settings("excel_start_row"))+i,
+                                sheet_obj,
+                                int(settings.get_from_settings("excel_start_coll")))
 
 
 window = Tk()
