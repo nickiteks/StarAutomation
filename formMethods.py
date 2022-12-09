@@ -3,6 +3,7 @@ from win32com.client import Dispatch
 from win32com.client import gencache
 import pythoncom
 import pandas as pd
+import openpyxl
 
 class Methods:
 
@@ -11,20 +12,29 @@ class Methods:
 
         for i in range(coll,coll+20):
             excel_data.append(sheet_obj.cell(row=row, column=i).value)
-        
-        print(excel_data)
 
         data = pd.read_csv(f'csv\star{row}.csv')
-        print(data)
 
-        print(data.head)
+        list_of_max = []
 
         for i in data:
-            print(i+'\n')
+            list_of_max.append(data[i].max())
 
-        list_of_max = data.max()[0]
+        wb = openpyxl.Workbook()
 
+        sheet = wb.active
+        print(excel_data)
         print(list_of_max)
+
+        for i in range(len(excel_data)):
+            sheet.cell(row = row, column=coll+i).value = excel_data[i]
+        
+        for i in range(len(list_of_max)):
+            sheet.cell(row = row, column=coll+i + len(excel_data)).value = str(list_of_max[i])
+
+        
+        wb.save('report/report.xlsx')
+
 
     def numberOfcullums(self,sheet_obj,row_start,coll):
         row_number = 0
