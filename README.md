@@ -5,6 +5,10 @@
 #  Запуск
 
 1.	Склонировать репозиторий
-<	git clone "https://github.com/nickiteks/StarAutomation">
+..*`git clone "https://github.com/nickiteks/StarAutomation"`
 2.	Установить библиотеки
+>`virtuaenv env`
+>`.\env\Script\activate`
+>`pip install -r requirements.txt`
 3.	Запустить
+>`python mainForm.py`
