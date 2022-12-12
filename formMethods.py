@@ -163,8 +163,10 @@ class Methods:
         saveCSV = settings.get_from_settings('csv_path')
         saveCSV = saveCSV.replace('"','')
         saveCSV = saveCSV + f'star{row}.csv'
-
-        fout = open(f"Macroses/macros{row}.java","w")
+        
+        macro_folder = (settings.get_from_settings('macros_path')).replace('\\\\','/')
+        macro_folder = macro_folder.replace('"','')
+        fout = open(f"{macro_folder}macros{row}.java","w")
         fout.write("""
 package macro;
 
@@ -1313,8 +1315,10 @@ public class %s extends StarMacro {
         saveCSV = settings.get_from_settings('csv_path')
         saveCSV = saveCSV.replace('"','')
         saveCSV = saveCSV + f'star{row}.csv'
-
-        fout = open(f"Macroses/macros{row}.java","w")
+        
+        macro_folder = (settings.get_from_settings('macros_path')).replace('\\\\','/')
+        macro_folder = macro_folder.replace('"','')
+        fout = open(f"{macro_folder}macros{row}.java","w")
         fout.write("""
 package macro;
 
