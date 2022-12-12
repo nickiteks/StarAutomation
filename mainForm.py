@@ -217,7 +217,7 @@ def btnOkClicked():
             sim = lblSave.cget('text').replace('/','\\')+'\\'
             sim = f"{sim}star.sim"
             java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
-            #os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+            os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
 
         
         else:
@@ -225,11 +225,11 @@ def btnOkClicked():
             sim = lblSave.cget('text').replace('/','\\')+'\\'
             sim = f"{sim}star{repeat_row}.sim"
             java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
-            #os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+            os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
 
-        # methods.reportGenerate(int(settings.get_from_settings("excel_start_row"))+i,
-        #                         sheet_obj,
-        #                         int(settings.get_from_settings("excel_start_coll")))
+        methods.reportGenerate(int(settings.get_from_settings("excel_start_row"))+i,
+                                sheet_obj,
+                                int(settings.get_from_settings("excel_start_coll")))
 
 
 window = Tk()
