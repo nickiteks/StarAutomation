@@ -194,30 +194,30 @@ def btnOkClicked():
                                          int(settings.get_from_settings("excel_start_coll")))
     
 
-    for i in range(0,1):
+    for i in range(row_number):
         repeat_row = methods.checkRepeatRow(sheet_obj,
                                             int(settings.get_from_settings("excel_start_row"))+i,
                                             int(settings.get_from_settings("excel_start_coll")))
 
-        # if repeat_row == 0:
-        #     methods.changeGeom(lblGeom.cget('text'),sheet_obj,int(settings.get_from_settings("excel_start_row"))+i)
-        #     methods.macroGeomCgange(int(settings.get_from_settings("excel_start_row")) + i,
-        #                             lblGeom.cget('text')[:-4].replace('/','\\\\'),
-        #                             sheet_obj,
-        #                             lblSave.cget('text').replace('/','\\\\'))
+        if repeat_row == 0:
+            methods.changeGeom(lblGeom.cget('text'),sheet_obj,int(settings.get_from_settings("excel_start_row"))+i)
+            methods.macroGeomCgange(int(settings.get_from_settings("excel_start_row")) + i,
+                                    lblGeom.cget('text')[:-4].replace('/','\\\\'),
+                                    sheet_obj,
+                                    lblSave.cget('text').replace('/','\\\\'))
 
-        #     sim = lblSave.cget('text').replace('/','\\')+'\\'
-        #     sim = f"{sim}star.sim"
-        #     java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
-        #     os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+            sim = lblSave.cget('text').replace('/','\\')+'\\'
+            sim = f"{sim}star.sim"
+            java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
+            os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
 
         
-        # else:
-        #     methods.macroGeomDontChange(int(settings.get_from_settings("excel_start_row"))+i,sheet_obj,lblSave.cget('text').replace('/','\\\\'))
-        #     sim = lblSave.cget('text').replace('/','\\')+'\\'
-        #     sim = f"{sim}star{repeat_row}.sim"
-        #     java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
-        #     os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+        else:
+            methods.macroGeomDontChange(int(settings.get_from_settings("excel_start_row"))+i,sheet_obj,lblSave.cget('text').replace('/','\\\\'))
+            sim = lblSave.cget('text').replace('/','\\')+'\\'
+            sim = f"{sim}star{repeat_row}.sim"
+            java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
+            os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
 
         methods.reportGenerate(int(settings.get_from_settings("excel_start_row"))+i,
                                 sheet_obj,

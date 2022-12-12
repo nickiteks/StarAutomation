@@ -4,27 +4,27 @@ from win32com.client import gencache
 import pythoncom
 import pandas as pd
 import openpyxl
+import numpy as np
 
 class Methods:
 
     def reportGenerate(self,row,sheet_obj,coll):
         excel_data = []
 
-        for i in range(coll,coll+20):
+        for i in range(coll,coll+21):
             excel_data.append(sheet_obj.cell(row=row, column=i).value)
 
-        data = pd.read_csv(f'csv\star{row}.csv')
 
+        data = pd.read_csv(f'csv\star{row}.csv',sep=';',decimal=',',encoding = "ISO-8859-1")
+        
         list_of_max = []
 
         for i in data:
             list_of_max.append(data[i].max())
 
-        wb = openpyxl.Workbook()
-
+        wb = openpyxl.load_workbook('report/report.xlsx')
+        
         sheet = wb.active
-        print(excel_data)
-        print(list_of_max)
 
         for i in range(len(excel_data)):
             sheet.cell(row = row, column=coll+i).value = excel_data[i]
@@ -32,8 +32,29 @@ class Methods:
         for i in range(len(list_of_max)):
             sheet.cell(row = row, column=coll+i + len(excel_data)).value = str(list_of_max[i])
 
-        
-        wb.save('report/report.xlsx')
+        wb.save('report/report.xlsx')  
+
+        header = ['N1','L1','N2','L2','a2','N3','L3','','','','Air blades','Air inlet','СH4','Temperature','S2','NН3','Н2','O2','N2','CO2','H20',
+        'Line Probe 8: Direction [-1,0,0] (m)',
+        'Line Probe 8: Temperature (K)',
+        'Line Probe 8: Direction [-1,0,0] (m)',
+        'Line Probe 8: Mass Fraction of Nitrogen Oxide Emission',
+        'Line Probe 8: Direction [-1,0,0] (m)',
+        'Line Probe 8: Mass Fraction of CO',
+        'Line Probe 8: Direction [-1,0,0] (m)',
+        'Line Probe 8: Mass Fraction of H2O']
+
+        csv_data =[[i] for i in excel_data+list_of_max]
+
+        for i in range(len(csv_data)):
+            for j in range(len(csv_data[i])):
+                csv_data[i][j] = str(csv_data[i][j]).replace('.',',')
+
+        df2 = pd.DataFrame(np.array(csv_data).transpose(),
+                   columns=header)
+
+        df2.to_csv('report/report.csv',sep=';',mode='a',decimal=',', float_format='%.3f', header=False)
+
 
 
     def numberOfcullums(self,sheet_obj,row_start,coll):
@@ -209,6 +230,7 @@ public class %s extends StarMacro {
         settingPlaneSection();
         createPlot();
         setStoppingCriterion(7000);
+	runSimulation();
         saveCSV();
         saveState();
         
@@ -757,7 +779,7 @@ public class %s extends StarMacro {
         TableFluidStream tableFluidStream_1 =
                 ((TableFluidStream) tableFluidStreamCollection_0.getFuelStream());
 
-        tableFluidStream_1.getFluidStreamComposition().setArray(new DoubleVector(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
+        tableFluidStream_1.getFluidStreamComposition().setArray(new DoubleVector(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
 
         TableSpeciesForPostProcessing tableSpeciesForPostProcessing_0 =
                 ((TableSpeciesForPostProcessing) fgmTableParameters.getTableSpeciesForPostProcessing());
@@ -1255,6 +1277,13 @@ public class %s extends StarMacro {
         csvWriter.flush();
         csvWriter.close();
     }
+	
+	private void runSimulation(){
+	Simulation simulation =
+                getActiveSimulation();
+	simulation.getSimulationIterator().run();
+
+	}
 }       
          """ % (
          f"macros{row}",
