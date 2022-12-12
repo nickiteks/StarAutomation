@@ -225,6 +225,7 @@ public class %s extends StarMacro {
         createVolumeMeshControl();
         createBoundaries();
         generateVolumeMesh();
+        saveState();
         createPlaneSection();
         settingPhysicsContinuum();
         createFgmTable();
