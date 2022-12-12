@@ -53,6 +53,7 @@ def settingsClick():
         settings.set_to_settings('macros_path',txtMacrosPath.get())
         settings.set_to_settings('csv_path',txtCSVPath.get())
         settings.set_to_settings('core_number',txtCoreNumber.get())
+        settings.set_to_settings('stop_criterion',txtStopCriterion.get())
    
     settings = Settings()
 
@@ -149,6 +150,13 @@ def settingsClick():
     txtCoreNumber.insert(0,settings.get_from_settings('core_number'))
     txtCoreNumber.grid(row = 8,column = 1)
 
+    lblStopCriterion = Label(settingsWindow,text='Критерий остановки')
+    lblStopCriterion.grid(row = 9,column = 0)
+
+    txtStopCriterion = Entry(settingsWindow,width=5)
+    txtStopCriterion.insert(0,settings.get_from_settings('stop_criterion'))
+    txtStopCriterion.grid(row = 9,column = 1)
+
     btnSaveConfig = Button(settingsWindow,text='Save Config',command=btnSaveConfig)
     btnSaveConfig.grid(row=10,column=3)
 
@@ -209,7 +217,7 @@ def btnOkClicked():
             sim = lblSave.cget('text').replace('/','\\')+'\\'
             sim = f"{sim}star.sim"
             java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
-            os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+            #os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
 
         
         else:
@@ -217,11 +225,11 @@ def btnOkClicked():
             sim = lblSave.cget('text').replace('/','\\')+'\\'
             sim = f"{sim}star{repeat_row}.sim"
             java = f"{settings.get_from_settings('macros_path')}macros{int(settings.get_from_settings('excel_start_row')) + i}.java"
-            os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
+            #os.system(f'start /wait cmd /c " cd {settings.get_from_settings("star_path")} & starccm+ -locale en -np {settings.get_from_settings("core_number")} {sim} -batch {java}"')
 
-        methods.reportGenerate(int(settings.get_from_settings("excel_start_row"))+i,
-                                sheet_obj,
-                                int(settings.get_from_settings("excel_start_coll")))
+        # methods.reportGenerate(int(settings.get_from_settings("excel_start_row"))+i,
+        #                         sheet_obj,
+        #                         int(settings.get_from_settings("excel_start_coll")))
 
 
 window = Tk()

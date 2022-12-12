@@ -232,7 +232,7 @@ public class %s extends StarMacro {
         createLinePart();
         settingPlaneSection();
         createPlot();
-        setStoppingCriterion(7000);
+        setStoppingCriterion(%i);
 	runSimulation();
         saveCSV();
         saveState();
@@ -1290,6 +1290,7 @@ public class %s extends StarMacro {
 }       
          """ % (
          f"macros{row}",
+         int(settings.get_from_settings('stop_criterion')),
          f"{geom}{row}.stp",
          settings.get_from_settings('grimech30_path'),
          settings.get_from_settings('thermo30_path'),
@@ -1379,7 +1380,7 @@ public class %s extends StarMacro {
                 getActiveSimulation();
 
         StepStoppingCriterion stepStoppingCriterion = ((StepStoppingCriterion) simulation.getSolverStoppingCriterionManager().getSolverStoppingCriterion("Maximum Steps"));
-        stepStoppingCriterion.setMaximumNumberSteps(7000);
+        stepStoppingCriterion.setMaximumNumberSteps(%i);
 
         Solution solution =
                 simulation.getSolution();
@@ -1638,6 +1639,7 @@ public class %s extends StarMacro {
     }
 }        
 """ % (f"macros{row}",
+        int(settings.get_from_settings('stop_criterion')),
         float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+10).value),
         float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+13).value),
         float(sheet_obj.cell(row=row, column = int(settings.get_from_settings("excel_start_coll"))+11).value),
