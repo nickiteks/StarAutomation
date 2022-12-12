@@ -236,6 +236,7 @@ public class %s extends StarMacro {
 	runSimulation();
         saveCSV();
         saveState();
+        Close();
         
     }
 
@@ -1281,12 +1282,17 @@ public class %s extends StarMacro {
         csvWriter.close();
     }
 	
-	private void runSimulation(){
-	Simulation simulation =
-                getActiveSimulation();
-	simulation.getSimulationIterator().run();
+        private void runSimulation(){
+                Simulation simulation =
+                        getActiveSimulation();
+                simulation.getSimulationIterator().run();
+        }
 
-	}
+        private void Close(){
+                Simulation simulation =
+                        getActiveSimulation();
+                simulation.close(ServerConnection.CloseOption.ForceClose);
+        }
 }       
          """ % (
          f"macros{row}",
@@ -1461,6 +1467,7 @@ public class %s extends StarMacro {
         simulation.getSimulationIterator().run();
         saveCSV();
         simulation.saveState("%s");
+        Close();
     }
     private void saveCSV(){
         Simulation simulation_0 =
@@ -1637,6 +1644,12 @@ public class %s extends StarMacro {
         csvWriter.flush();
         csvWriter.close();
     }
+
+    private void Close(){
+                Simulation simulation =
+                        getActiveSimulation();
+                simulation.close(ServerConnection.CloseOption.ForceClose);
+        }
 }        
 """ % (f"macros{row}",
         int(settings.get_from_settings('stop_criterion')),
