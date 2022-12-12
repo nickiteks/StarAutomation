@@ -4,6 +4,8 @@ import os
 import openpyxl
 from formMethods import Methods
 from configParser import Settings
+import customtkinter
+import tkinter
 
 
 def settingsClick():
@@ -58,107 +60,112 @@ def settingsClick():
     settings = Settings()
 
     settingsWindow = Toplevel(window)
+
+    settingsWindow.focus()
+
+    settingsWindow.config(bg="#242424")
+
  
     settingsWindow.title("Настройки")
  
-    settingsWindow.geometry("400x500")
+    settingsWindow.geometry("400x400")
 
-    lblExcelStartRow = Label(settingsWindow,text='Стартовая строка Excel')
-    lblExcelStartRow.grid(row = 0,column = 0)
+    lblExcelStartRow = Label(settingsWindow,text='Стартовая строка Excel',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblExcelStartRow.grid(row = 0,column = 0,sticky=E)
 
-    txtExcelStartRow = Entry(settingsWindow,width=5)
+    txtExcelStartRow = Entry(settingsWindow,width=20)
     txtExcelStartRow.insert(0,settings.get_from_settings("excel_start_row"))
     txtExcelStartRow.grid(row = 0,column = 1)
 
-    lblExcelStartColl = Label(settingsWindow,text='Стартовая колонка Excel')
-    lblExcelStartColl.grid(row = 1,column = 0)
+    lblExcelStartColl = Label(settingsWindow,text='Стартовая колонка Excel',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblExcelStartColl.grid(row = 1,column = 0,sticky=E)
 
-    txtExcelStartColl = Entry(settingsWindow,width=5)
+    txtExcelStartColl = Entry(settingsWindow,width=20)
     txtExcelStartColl.insert(0,settings.get_from_settings("excel_start_coll"))
     txtExcelStartColl.grid(row = 1,column = 1)
 
     #Grimech30____________
-    lblGrimech30Path = Label(settingsWindow,text='Путь Grimech30')
-    lblGrimech30Path.grid(row = 2,column = 0)
+    lblGrimech30Path = Label(settingsWindow,text='Путь Grimech30',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblGrimech30Path.grid(row = 2,column = 0,sticky=E)
 
     txtGrimech30Path = Entry(settingsWindow,width=20)
     txtGrimech30Path.insert(0,settings.get_from_settings('grimech30_path'))
     txtGrimech30Path.grid(row = 2,column = 1)
 
     btnGrimech30Path = Button(settingsWindow,text='...',command=btnGrimech30Path)
-    btnGrimech30Path.grid(row=2,column=3)
+    btnGrimech30Path.grid(row=2,column=3,sticky=W)
 
     #Thermo30____________
-    lblThermo30Path = Label(settingsWindow,text='Путь Thermo30')
-    lblThermo30Path.grid(row = 3,column = 0)
+    lblThermo30Path = Label(settingsWindow,text='Путь Thermo30',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblThermo30Path.grid(row = 3,column = 0,sticky=E)
 
     txtThermo30Path = Entry(settingsWindow,width=20)
     txtThermo30Path.insert(0,settings.get_from_settings('thermo30_path'))
     txtThermo30Path.grid(row = 3,column = 1)
 
     btnThermo30Path = Button(settingsWindow,text='...',command=btnThermo30Path)
-    btnThermo30Path.grid(row=3,column=3)
+    btnThermo30Path.grid(row=3,column=3,sticky=W)
 
     #Transport____________
-    lblTransportPath = Label(settingsWindow,text='Путь Transport')
-    lblTransportPath.grid(row = 4,column = 0)
+    lblTransportPath = Label(settingsWindow,text='Путь Transport',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblTransportPath.grid(row = 4,column = 0,sticky=E)
 
     txtTransportPath = Entry(settingsWindow,width=20)
     txtTransportPath.insert(0,settings.get_from_settings('transport_path'))
     txtTransportPath.grid(row = 4,column = 1)
 
     btnTransportPath = Button(settingsWindow,text='...',command=btnTransportPath)
-    btnTransportPath.grid(row=4,column=3)
+    btnTransportPath.grid(row=4,column=3,sticky=W)
 
     #star-ccm+____________
-    lblStarPath = Label(settingsWindow,text='Путь к star-ccm+')
-    lblStarPath.grid(row = 5,column = 0)
+    lblStarPath = Label(settingsWindow,text='Путь к star-ccm+',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblStarPath.grid(row = 5,column = 0,sticky=E)
 
     txtStarPath = Entry(settingsWindow,width=20)
     txtStarPath.insert(0,settings.get_from_settings('star_path'))
-    txtStarPath.grid(row = 5,column = 1)
+    txtStarPath.grid(row = 5,column = 1,sticky=W)
 
     btnStarPath = Button(settingsWindow,text='...',command=btnStarPath)
-    btnStarPath.grid(row=5,column=3)
+    btnStarPath.grid(row=5,column=3,sticky=W)
 
     #папка с макросами____________
-    lblMacrosPath = Label(settingsWindow,text='Путь к папке с макросами')
-    lblMacrosPath.grid(row = 6,column = 0)
+    lblMacrosPath = Label(settingsWindow,text='Путь к папке с макросами',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblMacrosPath.grid(row = 6,column = 0,sticky=E)
 
     txtMacrosPath = Entry(settingsWindow,width=20)
     txtMacrosPath.insert(0,settings.get_from_settings('macros_path'))
     txtMacrosPath.grid(row = 6,column = 1)
 
     btnMacrosPath = Button(settingsWindow,text='...',command=btnMacrosPath)
-    btnMacrosPath.grid(row=6,column=3)
+    btnMacrosPath.grid(row=6,column=3,sticky=W)
 
     #папка с csv____________
-    lblCSVPath = Label(settingsWindow,text='Путь к папке с CSV')
-    lblCSVPath.grid(row = 7,column = 0)
+    lblCSVPath = Label(settingsWindow,text='Путь к папке с CSV',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblCSVPath.grid(row = 7,column = 0,sticky=E)
 
     txtCSVPath = Entry(settingsWindow,width=20)
     txtCSVPath.insert(0,settings.get_from_settings('csv_path'))
     txtCSVPath.grid(row = 7,column = 1)
 
     btntxtCSVPath = Button(settingsWindow,text='...',command=btnCSVPath)
-    btntxtCSVPath.grid(row=7,column=3)
+    btntxtCSVPath.grid(row=7,column=3,sticky=W)
 
-    lblCoreNumber = Label(settingsWindow,text='Количество ядер')
-    lblCoreNumber.grid(row = 8,column = 0)
+    lblCoreNumber = Label(settingsWindow,text='Количество ядер',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblCoreNumber.grid(row = 8,column = 0,sticky=E)
 
-    txtCoreNumber = Entry(settingsWindow,width=5)
+    txtCoreNumber = Entry(settingsWindow,width=20)
     txtCoreNumber.insert(0,settings.get_from_settings('core_number'))
     txtCoreNumber.grid(row = 8,column = 1)
 
-    lblStopCriterion = Label(settingsWindow,text='Критерий остановки')
-    lblStopCriterion.grid(row = 9,column = 0)
+    lblStopCriterion = Label(settingsWindow,text='Критерий остановки',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblStopCriterion.grid(row = 9,column = 0,sticky=E)
 
-    txtStopCriterion = Entry(settingsWindow,width=5)
+    txtStopCriterion = Entry(settingsWindow,width=20)
     txtStopCriterion.insert(0,settings.get_from_settings('stop_criterion'))
     txtStopCriterion.grid(row = 9,column = 1)
 
-    btnSaveConfig = Button(settingsWindow,text='Save Config',command=btnSaveConfig)
-    btnSaveConfig.grid(row=10,column=3)
+    btnSaveConfig = customtkinter.CTkButton(settingsWindow,text='Save Config',command=btnSaveConfig)
+    btnSaveConfig.place(relx=0.8, rely=0.9, anchor=tkinter.CENTER)
 
 
 
@@ -232,34 +239,39 @@ def btnOkClicked():
                                 int(settings.get_from_settings("excel_start_coll")))
 
 
-window = Tk()
+window = customtkinter.CTk()
 
-mainmenu = Menu(window)
-window.config(menu=mainmenu)
-mainmenu.add_command(label='Настройки', command=settingsClick) 
+
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
+
+btnSettings = customtkinter.CTkButton(window,text='Настройки',command = settingsClick,width=5,height=1)
+btnSettings.place(relx=0.05, rely=0.025, anchor=tkinter.CENTER)
 
 window.title("Оптимизация расчетов")
-window.geometry('600x300')
+window.minsize(650,300)
+window.maxsize(650,300)
 
-lblGeom = Label(window,text='Выбор геометрии:')
-lblGeom.grid(row=0,column=0)
 
-btnGeom = Button(window,text="Выбрать геометрию",command = btnGeomClicked)
-btnGeom.grid(row=0,column=1)
+lblGeom = Label(window,text='Геометрия',width=51,background="#242424",font=('Times New Roman italic', 11),foreground="white")
+lblGeom.grid(row=0,column=0,sticky=E)
 
-lblExcel = Label(window,text='Выбор Excel:')
-lblExcel.grid(row=1,column=0)
+btnGeom = customtkinter.CTkButton(window,text="Выбрать геометрию",command = btnGeomClicked,)
+btnGeom.grid(row=0,column=1,pady=(15, 10))
 
-btnExcel = Button(window,text="Выбрать Excel",command = btnExcelClicked)
-btnExcel.grid(row=1,column=1)
+lblExcel = Label(window,text='Excel',width=51,background="#242424",font=('Times New Roman italic', 11),foreground="white")
+lblExcel.grid(row=1,column=0,sticky=E)
 
-lblSave = Label(window,text="Сохранение .sim файлов")
-lblSave.grid(row=2,column=0)
+btnExcel = customtkinter.CTkButton(window,text="Выбрать Excel",command = btnExcelClicked,)
+btnExcel.grid(row=1,column=1,pady=(15, 10))
 
-btnSave = Button(window,text='Выбрать путь',command=btnSaveClicked)
-btnSave.grid(row=2,column=1)
+lblSave = Label(window,text="Сохранение .sim файлов",width=51,background="#242424",font=('Times New Roman italic', 11),foreground="white")
+lblSave.grid(row=2,column=0,sticky=E)
 
-btnOk = Button(window,text='Ok',command = btnOkClicked)
-btnOk.grid(row=10,column=10)
+btnSave = customtkinter.CTkButton(window,text='Выбрать путь',command=btnSaveClicked,)
+btnSave.grid(row=2,column=1,pady=(15, 10))
+
+btnOk = customtkinter.CTkButton(window,text='Ok',command = btnOkClicked)
+btnOk.place(relx=0.85, rely=0.9, anchor=tkinter.CENTER)
 
 window.mainloop()
