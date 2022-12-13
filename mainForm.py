@@ -30,7 +30,7 @@ def settingsClick():
         changeTxt(txtTransportPath,f'"{file}"')
 
     def btnStarPath():
-        file = fd.askopenfilename()
+        file = fd.askdirectory()
         file = file.replace('/','\\\\')
         changeTxt(txtStarPath,f'"{file}"')
 
