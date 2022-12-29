@@ -495,7 +495,9 @@ public class %s extends StarMacro {
 
         volumeControlSize_2.getRelativeSizeScalar().setValueAndUnits(5.0, units_1);
 
-        autoMeshOperation_0.getDefaultValues().get(BaseSize.class).setValueAndUnits(0.5, units_0);
+        autoMeshOperation_0.getDefaultValues().get(BaseSize.class).setValueAndUnits(%f, units_0);
+
+        autoMeshOperation_0.getMesherParallelModeOption().setSelected(MesherParallelModeOption.Type.PARALLEL);
 
     }
 
@@ -1298,6 +1300,7 @@ public class %s extends StarMacro {
          f"macros{row}",
          int(settings.get_from_settings('stop_criterion')),
          f"{geom}{row}.stp",
+         float(settings.get_from_settings('base_size')),
          settings.get_from_settings('grimech30_path'),
          settings.get_from_settings('thermo30_path'),
          settings.get_from_settings('transport_path'),

@@ -56,6 +56,7 @@ def settingsClick():
         settings.set_to_settings('csv_path',txtCSVPath.get())
         settings.set_to_settings('core_number',txtCoreNumber.get())
         settings.set_to_settings('stop_criterion',txtStopCriterion.get())
+        settings.set_to_settings('base_size',txtBaseSize.get())
    
     settings = Settings()
 
@@ -163,6 +164,13 @@ def settingsClick():
     txtStopCriterion = Entry(settingsWindow,width=20)
     txtStopCriterion.insert(0,settings.get_from_settings('stop_criterion'))
     txtStopCriterion.grid(row = 9,column = 1)
+
+    lblBaseSize = Label(settingsWindow,text='Базовый размер',background="#242424",font=('Times New Roman italic', 11),foreground="white")
+    lblBaseSize.grid(row = 10,column = 0,sticky=E)
+
+    txtBaseSize = Entry(settingsWindow,width=20)
+    txtBaseSize.insert(0,settings.get_from_settings('base_size'))
+    txtBaseSize.grid(row = 10,column = 1)
 
     btnSaveConfig = customtkinter.CTkButton(settingsWindow,text='Save Config',command=btnSaveConfig)
     btnSaveConfig.place(relx=0.8, rely=0.9, anchor=tkinter.CENTER)
